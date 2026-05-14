@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@import '@monorepo/ui/tokens.css';
+
+body {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
