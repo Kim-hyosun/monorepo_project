@@ -1,0 +1,83 @@
+'use client'
+
+import ReactECharts from 'echarts-for-react'
+
+interface Props {
+  data: Array<[number, number]>
+  title: string
+  yLabel?: string
+  dark?: boolean
+}
+
+export default function TrendLineChart({ data, title, yLabel, dark }: Props) {
+  if (dark) {
+    const option = {
+      backgroundColor: 'transparent',
+      title: { text: title, textStyle: { fontSize: 13, color: '#c3eaff' } },
+      tooltip: {
+        trigger: 'axis' as const,
+        backgroundColor: 'rgba(0,6,77,0.85)',
+        borderColor: '#5cafff',
+        textStyle: { color: '#fff' },
+      },
+      grid: { left: 60, right: 30, top: 40, bottom: 30 },
+      xAxis: {
+        type: 'time' as const,
+        axisLine: { lineStyle: { color: '#5cafff88' } },
+        axisLabel: { color: '#c3eaff' },
+        splitLine: { lineStyle: { color: 'rgba(139, 194, 240, 0.1)' } },
+      },
+      yAxis: {
+        type: 'value' as const,
+        name: yLabel,
+        nameTextStyle: { color: '#c3eaff' },
+        axisLine: { lineStyle: { color: '#5cafff88' } },
+        axisLabel: { color: '#c3eaff' },
+        splitLine: { lineStyle: { color: 'rgba(139, 194, 240, 0.1)' } },
+      },
+      series: [
+        {
+          type: 'line' as const,
+          smooth: true,
+          showSymbol: false,
+          data,
+          itemStyle: { color: '#5cafff' },
+          lineStyle: { width: 2, shadowColor: '#5cafff', shadowBlur: 10 },
+          areaStyle: {
+            color: {
+              type: 'linear' as const,
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                { offset: 0, color: 'rgba(92, 175, 255, 0.4)' },
+                { offset: 1, color: 'rgba(92, 175, 255, 0)' },
+              ],
+            },
+          },
+        },
+      ],
+    }
+    return <ReactECharts option={option} style={{ height: 280, width: '100%' }} />
+  }
+
+  const option = {
+    title: { text: title, textStyle: { fontSize: 13 } },
+    tooltip: { trigger: 'axis' as const },
+    grid: { left: 60, right: 30, top: 40, bottom: 30 },
+    xAxis: { type: 'time' as const },
+    yAxis: { type: 'value' as const, name: yLabel },
+    series: [
+      {
+        type: 'line' as const,
+        smooth: true,
+        showSymbol: false,
+        data,
+        itemStyle: { color: '#22c55e' },
+        areaStyle: { color: 'rgba(34, 197, 94, 0.12)' },
+      },
+    ],
+  }
+  return <ReactECharts option={option} style={{ height: 280, width: '100%' }} />
+}

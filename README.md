@@ -362,17 +362,6 @@ dialog.alert / dialog.confirm — 동일 시그니처
 
 ---
 
-## Troubleshooting
-
-| 증상 | 원인 / 해결 |
-|---|---|
-| `Cannot find module '@monorepo/ui'` 빌드 에러 | `next.config.ts`의 `transpilePackages`에 패키지명 추가했는지 확인 |
-| 캐시가 hit 안 됨 | Next.js가 빌드 시 `next-env.d.ts`에 한 줄 추가하는 경우가 있어 첫 빌드 후 한 번은 hash 변동. 두 번째 빌드부터 정상 캐시 |
-| `pnpm install` 후 변경이 반영 안 됨 | `node_modules/.pnpm` 캐시 문제일 수 있음 → `pnpm clean` 후 재설치 |
-| 한 앱만 dev 띄우고 싶음 | `pnpm --filter <app> dev` 사용. 루트 `pnpm dev`는 모든 앱 동시 실행 |
-
----
-
 ## References
 
 - pnpm Workspaces — https://pnpm.io/workspaces
