@@ -31,16 +31,16 @@ export const aioRoutes: RouteMeta[] = [
 ]
 
 export const pmsRoutes: RouteMeta[] = [
-  { path: '/pms', label: 'PMS Dashboard', group: 'pms' },
-  { path: '/Monitoring', label: 'Monitoring', group: 'pms' },
+  { path: '/pms', label: 'PMS 대시보드', group: 'pms' },
+  { path: '/Monitoring', label: '통합 모니터링', group: 'pms' },
   ...[1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map<RouteMeta>((n) => ({
     path: `/monitor${n}`,
-    label: `Monitor ${n}`,
+    label: `펌프모터 모니터링 #${n}`,
     group: 'pms',
   })),
   ...[1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18].map<RouteMeta>((n) => ({
     path: `/detail${n}`,
-    label: `Detail ${n}`,
+    label: `펌프모터 상세 #${n}`,
     group: 'pms',
   })),
 ]

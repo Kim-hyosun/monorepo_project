@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { SettingsPage } from '@/features/ems/components/SettingsPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <SettingsPage variant='peak_set' />
 }

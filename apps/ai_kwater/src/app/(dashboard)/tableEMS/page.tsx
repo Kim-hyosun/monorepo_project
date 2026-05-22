@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { TableEmsPage } from '@/features/ems/components/TableEmsPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <TableEmsPage />
 }

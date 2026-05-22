@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { EmsDashboard } from '@/features/ems/components/EmsDashboard'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <EmsDashboard />
 }

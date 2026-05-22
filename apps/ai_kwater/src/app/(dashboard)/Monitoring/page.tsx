@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { MonitoringPage } from '@/features/pms/components/MonitoringPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <MonitoringPage />
 }

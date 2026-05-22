@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { PeakPage } from '@/features/ems/components/PeakPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <PeakPage variant='peak' />
 }

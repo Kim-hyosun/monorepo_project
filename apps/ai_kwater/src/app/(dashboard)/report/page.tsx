@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { CostPage } from '@/features/ems/components/CostPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <CostPage variant='report' />
 }

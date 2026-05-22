@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { DetailPage } from '@/features/pms/components/DetailPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <DetailPage index={9} title='펌프모터 상세 #9' />
 }

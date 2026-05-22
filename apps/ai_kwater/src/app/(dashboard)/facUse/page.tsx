@@ -1,5 +1,7 @@
-import PagePlaceholder from "@/shared/components/PagePlaceholder"
+'use client'
+
+import { PumpAnalysisPage } from '@/features/ems/components/PumpAnalysisPage'
 
 export default function Page() {
-  return <PagePlaceholder />
+  return <PumpAnalysisPage variant='facUse' />
 }
