@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { pmsApi } from '@/features/pms/api/pmsApi'
 
@@ -14,7 +14,7 @@ export function usePmsMotorsQuery() {
   return useQuery({
     queryKey: pmsKeys.motors(),
     queryFn: async () => (await pmsApi.listMotors()).motors,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -23,7 +23,7 @@ export function usePmsMotorQuery(id: string | null) {
     queryKey: pmsKeys.motor(id ?? ''),
     queryFn: async () => (await pmsApi.getMotor(id as string)).motor,
     enabled: !!id,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -31,7 +31,7 @@ export function usePmsAlertsQuery() {
   return useQuery({
     queryKey: pmsKeys.alerts(),
     queryFn: async () => (await pmsApi.listAlerts()).alerts,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -39,6 +39,16 @@ export function usePmsProcessStatusQuery() {
   return useQuery({
     queryKey: pmsKeys.process(),
     queryFn: async () => (await pmsApi.getProcessStatus()).process,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
+  })
+}
+
+export function useMarkAlertRead() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (num: number) => pmsApi.markAlertRead(num),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: pmsKeys.alerts() })
+    },
   })
 }

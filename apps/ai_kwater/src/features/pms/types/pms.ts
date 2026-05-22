@@ -34,6 +34,8 @@ export interface PmsAlert {
   list: string
   info: string
   status: string
+  /** 사용자가 확인한 알람 여부 (선택). 미존재 시 false 처리 */
+  read?: boolean
 }
 
 export interface ProcessStatus {

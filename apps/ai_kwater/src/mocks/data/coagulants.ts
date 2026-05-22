@@ -17,4 +17,6 @@ export const seedCoagulantsLatest: CoagulantsLatest = {
   in_tb: 3.4,
   recommend_cg_dose: 37.9,
   ai_cg_dose_trend: trend,
+  cg_residual: 0.45,
+  cg_pump_states: [true, true, false, true],
 }

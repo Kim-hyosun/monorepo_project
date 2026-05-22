@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 
 import { AioPanel } from '@/shared/components/AioPanel'
 import { TopNavigator } from '@/shared/components/TopNavigator'
+import { MixingLeftContents } from '@/features/mixing/components/MixingLeftContents'
+import { MixingRightContents } from '@/features/mixing/components/MixingRightContents'
+import { ProcessHero } from '@/shared/components/ProcessHero'
 import { ProcessPageHeader } from '@/shared/components/ProcessPageHeader'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { Input } from '@/shared/ui/input'
@@ -16,10 +19,10 @@ import {
 import { dialog } from '@/libs/dialog'
 import type { OperationMode } from '@/shared/components/ModeToggleBar'
 
-const TrendLineChart = dynamic(
-  () => import('@/features/receiving/components/TrendLineChart'),
-  { ssr: false, loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div> },
-)
+const TrendLineChart = dynamic(() => import('@/features/receiving/components/TrendLineChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
 
 interface Props {
   step: 3 | 4
@@ -72,6 +75,7 @@ export function MtccPage({ step }: Props) {
   return (
     <div className='-m-6 min-h-screen space-y-4 p-6 text-white' style={DARK_WRAPPER_STYLE}>
       <TopNavigator variant='dark' />
+      <ProcessHero cubeKey='mixing' title='혼화 공정' subtitle='G값 / 응집시간 모니터링' />
       <ProcessPageHeader
         variant='dark'
         title={`혼화 — 알고리즘 (${step}단계)`}
@@ -83,6 +87,9 @@ export function MtccPage({ step }: Props) {
         onSave={onSave}
         saveDisabled={isPending}
       />
+
+      <MixingLeftContents data={data} />
+      <MixingRightContents data={data} />
 
       <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
         {isModifyMode ? (
@@ -98,7 +105,13 @@ export function MtccPage({ step }: Props) {
         )}
         <KpiCard variant='dark' highlight label='AI G값' value={aiG} unit='s⁻¹' />
         <KpiCard variant='dark' label='혼화기 RPM' value={data.mixer_rpm} unit='rpm' />
-        <KpiCard variant='dark' highlight label='AI 혼화기 RPM' value={data.ai_mixer_rpm} unit='rpm' />
+        <KpiCard
+          variant='dark'
+          highlight
+          label='AI 혼화기 RPM'
+          value={data.ai_mixer_rpm}
+          unit='rpm'
+        />
       </div>
 
       {data.ai_g_value_trend ? (
@@ -110,7 +123,15 @@ export function MtccPage({ step }: Props) {
   )
 }
 
-function DarkModifyField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function DarkModifyField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+}) {
   return (
     <div className='rounded-lg border border-[var(--aio-accent)]/50 bg-[var(--aio-panel)] p-4'>
       <div className='text-xs text-[var(--aio-subtitle)]'>{label}</div>

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { AioPageHeader } from '@/shared/components/AioPageHeader'
 import { AioPanel } from '@/shared/components/AioPanel'
 import { KpiCard } from '@/shared/components/KpiCard'
+import { cn } from '@/shared/utils/cn'
 import { AnalysisResultPanel } from '@/features/ems/components/analysis/AnalysisResultPanel'
 import { PumpControlPanel } from '@/features/ems/components/analysis/PumpControlPanel'
 import { PumpOperationStatus } from '@/features/ems/components/analysis/PumpOperationStatus'
@@ -232,15 +233,10 @@ function SujiSelectPage() {
   const [granularity, setGranularity] = useState<PumpPerformGranularity>('hour')
   const [dates, setDates] = useState<[string, string, string]>(['', '', ''])
   const [query, setQuery] = useState({ granularity, from: '', to: '' })
-  const { data: suji, isFetching } = useEmsSujiSelectQuery(
-    query.granularity,
-    query.from,
-    query.to,
-  )
+  const { data: suji, isFetching } = useEmsSujiSelectQuery(query.granularity, query.from, query.to)
   const meta = VARIANT_META.sujiSelect
 
-  const submit = () =>
-    setQuery({ granularity, from: dates[0], to: dates[1] })
+  const submit = () => setQuery({ granularity, from: dates[0], to: dates[1] })
 
   return (
     <EmsPageWrapper>
@@ -277,8 +273,15 @@ function SujiSelectPage() {
   )
 }
 
+type Suji2Tab = 'trend' | 'distribution'
+const SUJI2_TABS: Array<{ key: Suji2Tab; label: string }> = [
+  { key: 'trend', label: '수위 트렌드' },
+  { key: 'distribution', label: '분포 / 순시' },
+]
+
 function SujiSelect2Page() {
   const [selected, setSelected] = useState<string>('')
+  const [tab, setTab] = useState<Suji2Tab>('trend')
   const { data: suji2 } = useEmsSujiSelect2Query(selected)
   const meta = VARIANT_META.sujiSelect_2
 
@@ -296,7 +299,7 @@ function SujiSelect2Page() {
       <AioPageHeader title={meta.title} description='주요 배수지 수위 현황' />
 
       <div className='grid grid-cols-12 gap-3'>
-        <div className='col-span-3'>
+        <div className='col-span-12 lg:col-span-3'>
           <ReservoirSelectorList
             reservoirs={suji2.reservoirs}
             selected={suji2.selected}
@@ -304,27 +307,51 @@ function SujiSelect2Page() {
           />
         </div>
 
-        <div className='col-span-9 space-y-3'>
-          <div className='grid grid-cols-12 gap-3'>
-            <div className='col-span-8'>
-              <LevelTrendChart data={suji2} />
-            </div>
-            <div className='col-span-4'>
-              <LevelDistributionChart items={suji2.distribution} selected={suji2.selected} />
-            </div>
+        <div className='col-span-12 lg:col-span-9 space-y-3'>
+          <div className='flex flex-wrap gap-1 rounded-md border border-[var(--aio-panel-border)] bg-[var(--aio-panel)] p-1'>
+            {SUJI2_TABS.map((t) => (
+              <button
+                key={t.key}
+                type='button'
+                onClick={() => setTab(t.key)}
+                className={cn(
+                  'rounded px-3 py-1.5 text-xs font-medium transition',
+                  tab === t.key
+                    ? 'bg-[var(--aio-accent)]/30 text-white'
+                    : 'text-[var(--aio-subtitle)] hover:bg-white/5',
+                )}
+                style={tab === t.key ? { textShadow: 'var(--aio-text-glow)' } : undefined}
+              >
+                {t.label}
+              </button>
+            ))}
           </div>
-          <LevelInstantList items={suji2.instant} />
+
+          {tab === 'trend' ? <LevelTrendChart data={suji2} /> : null}
+          {tab === 'distribution' ? (
+            <>
+              <LevelDistributionChart items={suji2.distribution} selected={suji2.selected} />
+              <LevelInstantList items={suji2.instant} />
+            </>
+          ) : null}
         </div>
       </div>
     </EmsPageWrapper>
   )
 }
 
+type PumpPerformTab = 'chart' | 'runtime'
+const PUMP_PERFORM_TABS: Array<{ key: PumpPerformTab; label: string }> = [
+  { key: 'chart', label: '게이지 + 차트' },
+  { key: 'runtime', label: '가동시간' },
+]
+
 function PumpPerformPage() {
   const [granularity, setGranularity] = useState<PumpPerformGranularity>('hour')
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [query, setQuery] = useState({ granularity, from, to })
+  const [tab, setTab] = useState<PumpPerformTab>('chart')
   const { data: perform, isFetching } = useEmsPumpPerformQuery(
     query.granularity,
     query.from,
@@ -349,39 +376,60 @@ function PumpPerformPage() {
         disabled={isFetching}
       />
 
+      <div className='flex flex-wrap gap-1 rounded-md border border-[var(--aio-panel-border)] bg-[var(--aio-panel)] p-1'>
+        {PUMP_PERFORM_TABS.map((t) => (
+          <button
+            key={t.key}
+            type='button'
+            onClick={() => setTab(t.key)}
+            className={cn(
+              'rounded px-3 py-1.5 text-xs font-medium transition',
+              tab === t.key
+                ? 'bg-[var(--aio-accent)]/30 text-white'
+                : 'text-[var(--aio-subtitle)] hover:bg-white/5',
+            )}
+            style={tab === t.key ? { textShadow: 'var(--aio-text-glow)' } : undefined}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       {!perform ? (
         <div className='text-[var(--aio-subtitle)]'>로딩 중…</div>
-      ) : (
+      ) : tab === 'chart' ? (
         <>
           <PumpGaugeCardGrid gauges={perform.gauges} />
-
-          <div className='grid grid-cols-12 gap-3'>
-            <AioPanel className='col-span-7 p-4'>
+          <AioPanel className='p-4'>
+            <h3 className='mb-2 text-sm font-semibold text-[var(--aio-subtitle)]'>
+              전력 사용량 (kWh)
+            </h3>
+            <PowerMileageAreaChart data={perform} height={280} />
+            <div className='mt-4'>
               <h3 className='mb-2 text-sm font-semibold text-[var(--aio-subtitle)]'>
-                전력 사용량 (kWh)
+                송산 주파수 (Hz)
               </h3>
-              <PowerMileageAreaChart data={perform} height={240} />
-              <div className='mt-3'>
-                <h3 className='mb-2 text-sm font-semibold text-[var(--aio-subtitle)]'>
-                  송산 주파수 (Hz)
-                </h3>
-                <HzTrendLineChart data={perform} height={180} />
-              </div>
-            </AioPanel>
-
-            <div className='col-span-5'>
-              <PumpRuntimeBarChart rows={perform.runtimeBars} />
+              <HzTrendLineChart data={perform} height={220} />
             </div>
-          </div>
+          </AioPanel>
         </>
+      ) : (
+        <PumpRuntimeBarChart rows={perform.runtimeBars} />
       )}
     </EmsPageWrapper>
   )
 }
 
+type SongsuTab = 'operation' | 'reservoir'
+const SONGSU_TABS: Array<{ key: SongsuTab; label: string }> = [
+  { key: 'operation', label: 'AI 운영' },
+  { key: 'reservoir', label: '배수지' },
+]
+
 function SongsuPage() {
   const { data: songsu } = useEmsSongsuQuery()
   const meta = VARIANT_META.songsu
+  const [tab, setTab] = useState<SongsuTab>('operation')
 
   if (!songsu) {
     return (
@@ -395,34 +443,60 @@ function SongsuPage() {
     <EmsPageWrapper>
       <AioPageHeader title={meta.title} description={meta.description} />
 
-      <div className='grid grid-cols-12 gap-3'>
-        <div className='col-span-7 space-y-3'>
-          <AiPumpSection
-            pyeongtaek={songsu.pyeongtaek.ai}
-            songsan={songsu.songsan.ai}
-          />
-          <CurrentPumpSection
-            pyeongtaek={songsu.pyeongtaek.current}
-            songsan={songsu.songsan.current}
-          />
-          <PipeFlowDiagram pipe={songsu.pipe} />
-        </div>
-
-        <div className='col-span-5 space-y-3'>
-          <AiOperationToggle
-            pyeongtaek={songsu.aiOperation.pyeongtaek}
-            songsan={songsu.aiOperation.songsan}
-          />
-          <ReservoirOperationGrid reservoirs={songsu.reservoirs} />
-        </div>
+      <div className='flex flex-wrap gap-1 rounded-md border border-[var(--aio-panel-border)] bg-[var(--aio-panel)] p-1'>
+        {SONGSU_TABS.map((t) => (
+          <button
+            key={t.key}
+            type='button'
+            onClick={() => setTab(t.key)}
+            className={cn(
+              'rounded px-3 py-1.5 text-xs font-medium transition',
+              tab === t.key
+                ? 'bg-[var(--aio-accent)]/30 text-white'
+                : 'text-[var(--aio-subtitle)] hover:bg-white/5',
+            )}
+            style={tab === t.key ? { textShadow: 'var(--aio-text-glow)' } : undefined}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
+
+      {tab === 'operation' ? (
+        <div className='grid grid-cols-12 gap-3'>
+          <div className='col-span-12 lg:col-span-7 space-y-3'>
+            <AiPumpSection pyeongtaek={songsu.pyeongtaek.ai} songsan={songsu.songsan.ai} />
+            <CurrentPumpSection
+              pyeongtaek={songsu.pyeongtaek.current}
+              songsan={songsu.songsan.current}
+            />
+            <PipeFlowDiagram pipe={songsu.pipe} />
+          </div>
+          <div className='col-span-12 lg:col-span-5'>
+            <AiOperationToggle
+              pyeongtaek={songsu.aiOperation.pyeongtaek}
+              songsan={songsu.aiOperation.songsan}
+            />
+          </div>
+        </div>
+      ) : null}
+
+      {tab === 'reservoir' ? <ReservoirOperationGrid reservoirs={songsu.reservoirs} /> : null}
     </EmsPageWrapper>
   )
 }
 
+type AnalysisTab = 'status' | 'control' | 'result'
+const ANALYSIS_TABS: Array<{ key: AnalysisTab; label: string }> = [
+  { key: 'status', label: '운영현황' },
+  { key: 'control', label: '펌프제어' },
+  { key: 'result', label: '분석결과' },
+]
+
 function AnalysisPage() {
   const { data: analysis } = useEmsAnalysisQuery()
   const meta = VARIANT_META.analysis
+  const [tab, setTab] = useState<AnalysisTab>('status')
 
   if (!analysis) {
     return (
@@ -436,18 +510,49 @@ function AnalysisPage() {
     <EmsPageWrapper>
       <AioPageHeader title={meta.title} description={meta.description} />
 
-      <div className='grid grid-cols-12 gap-3'>
-        <div className='col-span-4 space-y-3'>
-          <PumpOperationStatus pyeongtaek={analysis.pyeongtaek} songsan={analysis.songsan} />
-          <ReservoirValvePanel reservoirs={analysis.reservoirs} />
-        </div>
+      <div className='flex flex-wrap gap-1 rounded-md border border-[var(--aio-panel-border)] bg-[var(--aio-panel)] p-1'>
+        {ANALYSIS_TABS.map((t) => (
+          <button
+            key={t.key}
+            type='button'
+            onClick={() => setTab(t.key)}
+            className={cn(
+              'rounded px-3 py-1.5 text-xs font-medium transition',
+              tab === t.key
+                ? 'bg-[var(--aio-accent)]/30 text-white'
+                : 'text-[var(--aio-subtitle)] hover:bg-white/5',
+            )}
+            style={tab === t.key ? { textShadow: 'var(--aio-text-glow)' } : undefined}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
-        <div className='col-span-4 space-y-3'>
-          <RequiredPressurePanel required={analysis.required} />
-          <PumpControlPanel pyeongtaek={analysis.pyeongtaek} songsan={analysis.songsan} />
+      {tab === 'status' ? (
+        <div className='grid grid-cols-12 gap-3'>
+          <div className='col-span-12 md:col-span-6 space-y-3'>
+            <PumpOperationStatus pyeongtaek={analysis.pyeongtaek} songsan={analysis.songsan} />
+          </div>
+          <div className='col-span-12 md:col-span-6 space-y-3'>
+            <ReservoirValvePanel reservoirs={analysis.reservoirs} />
+          </div>
         </div>
+      ) : null}
 
-        <div className='col-span-4 space-y-3'>
+      {tab === 'control' ? (
+        <div className='grid grid-cols-12 gap-3'>
+          <div className='col-span-12 md:col-span-6 space-y-3'>
+            <RequiredPressurePanel required={analysis.required} />
+          </div>
+          <div className='col-span-12 md:col-span-6 space-y-3'>
+            <PumpControlPanel pyeongtaek={analysis.pyeongtaek} songsan={analysis.songsan} />
+          </div>
+        </div>
+      ) : null}
+
+      {tab === 'result' ? (
+        <div className='space-y-3'>
           <AnalysisResultPanel
             pyeongtaekAi={analysis.pyeongtaekAi}
             songsanAi={analysis.songsanAi}
@@ -456,10 +561,10 @@ function AnalysisPage() {
             <h3 className='mb-2 text-sm font-semibold text-[var(--aio-subtitle)]'>
               에너지 절감 트렌드
             </h3>
-            <EnergySaveTrendChart trend={analysis.energyTrend} height={220} />
+            <EnergySaveTrendChart trend={analysis.energyTrend} height={260} />
           </AioPanel>
         </div>
-      </div>
+      ) : null}
     </EmsPageWrapper>
   )
 }
@@ -478,8 +583,7 @@ function SimpleVariantPage({ variant }: { variant: PumpAnalysisVariant }) {
 
   const { pump, power_trend, ai_power_trend, load_trend } = latest
 
-  const h1Total =
-    (pump.h1_pm1 ?? 0) + (pump.h1_pm2 ?? 0) + (pump.h1_pm3 ?? 0) + (pump.h1_pm4 ?? 0)
+  const h1Total = (pump.h1_pm1 ?? 0) + (pump.h1_pm2 ?? 0) + (pump.h1_pm3 ?? 0) + (pump.h1_pm4 ?? 0)
   const h2Total =
     (pump.h2_pm1 ?? 0) + (pump.h2_pm2 ?? 0) + (pump.h2_pm_sp1 ?? 0) + (pump.h2_pm_sp2 ?? 0)
   const aiH1Total =
@@ -497,8 +601,20 @@ function SimpleVariantPage({ variant }: { variant: PumpAnalysisVariant }) {
       <div className='grid grid-cols-4 gap-3'>
         <KpiCard variant='dark' label='평택 H1 합계' value={h1Total.toFixed(1)} unit='kW' />
         <KpiCard variant='dark' label='안성 H2 합계' value={h2Total.toFixed(1)} unit='kW' />
-        <KpiCard variant='dark' label='AI H1 추천' value={aiH1Total.toFixed(1)} unit='kW' highlight />
-        <KpiCard variant='dark' label='AI H2 추천' value={aiH2Total.toFixed(1)} unit='kW' highlight />
+        <KpiCard
+          variant='dark'
+          label='AI H1 추천'
+          value={aiH1Total.toFixed(1)}
+          unit='kW'
+          highlight
+        />
+        <KpiCard
+          variant='dark'
+          label='AI H2 추천'
+          value={aiH2Total.toFixed(1)}
+          unit='kW'
+          highlight
+        />
       </div>
 
       <AioPanel className='p-4'>

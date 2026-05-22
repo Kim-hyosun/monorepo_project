@@ -19,6 +19,7 @@ interface Props {
   height?: number
   xAxisType?: 'time' | 'category'
   categories?: string[]
+  enableExport?: boolean
 }
 
 const PALETTE = ['#5cafff', '#7dd3fc', '#fbbf24', '#f87171', '#a78bfa', '#34d399']
@@ -30,6 +31,7 @@ export default function EmsLineChart({
   height = 280,
   xAxisType = 'time',
   categories,
+  enableExport,
 }: Props) {
   const seriesData = series.map<Highcharts.SeriesOptionsType>((s, i) => {
     const color = s.color ?? PALETTE[i % PALETTE.length]
@@ -75,5 +77,5 @@ export default function EmsLineChart({
     series: seriesData,
   })
 
-  return <BaseHighchart options={options} height={height} />
+  return <BaseHighchart options={options} height={height} enableExport={enableExport} />
 }

@@ -1,11 +1,13 @@
 'use client'
 
-import ReactECharts from 'echarts-for-react'
+import type Highcharts from 'highcharts'
 
+import BaseHighchart from '@/features/ems/components/highcharts/BaseHighchart'
 import { PERFORMANCE_TYPE, type MonitoringPoint } from '@/features/performance/types/performance'
 
 interface Props {
   data: MonitoringPoint[]
+  enableExport?: boolean
 }
 
 const TYPE_LABELS: Record<number, string> = {
@@ -23,44 +25,52 @@ function formatTimeLabel(ts: string): string {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-export default function MonitoringLineChart({ data }: Props) {
+export default function MonitoringLineChart({ data, enableExport }: Props) {
   const cpuPoints = data.filter((p) => p.type === PERFORMANCE_TYPE.CPU)
   const memoryPoints = data.filter((p) => p.type === PERFORMANCE_TYPE.MEMORY)
   const diskPoints = data.filter((p) => p.type === PERFORMANCE_TYPE.DISK)
 
-  const xAxis = cpuPoints.map((p) => formatTimeLabel(p.timestamp))
+  const categories = cpuPoints.map((p) => formatTimeLabel(p.timestamp))
 
-  const option = {
-    title: { text: '리소스 사용률 (최근 1시간)', textStyle: { fontSize: 14 } },
-    tooltip: { trigger: 'axis' as const },
-    legend: { data: Object.values(TYPE_LABELS) },
-    grid: { left: 50, right: 30, top: 50, bottom: 30 },
-    xAxis: { type: 'category' as const, data: xAxis },
-    yAxis: { type: 'value' as const, min: 0, max: 100 },
+  const options: Highcharts.Options = {
+    chart: { height: 360, marginTop: 60, backgroundColor: 'transparent' },
+    credits: { enabled: false },
+    accessibility: { enabled: false },
+    exporting: { enabled: false },
+    title: {
+      text: '리소스 사용률 (최근 1시간)',
+      align: 'left',
+      style: { fontSize: '14px' },
+    },
+    tooltip: { shared: true },
+    legend: { align: 'left', verticalAlign: 'top' },
+    xAxis: { type: 'category', categories },
+    yAxis: { title: { text: undefined }, min: 0, max: 100 },
+    plotOptions: { series: { animation: { duration: 200 }, marker: { enabled: false } } },
     series: [
       {
+        type: 'line',
         name: TYPE_LABELS[PERFORMANCE_TYPE.CPU],
-        type: 'line' as const,
-        smooth: true,
         data: cpuPoints.map((p) => p.value),
-        itemStyle: { color: '#3b82f6' },
+        color: '#3b82f6',
+        lineWidth: 2,
       },
       {
+        type: 'line',
         name: TYPE_LABELS[PERFORMANCE_TYPE.MEMORY],
-        type: 'line' as const,
-        smooth: true,
         data: memoryPoints.map((p) => p.value),
-        itemStyle: { color: '#22c55e' },
+        color: '#22c55e',
+        lineWidth: 2,
       },
       {
+        type: 'line',
         name: TYPE_LABELS[PERFORMANCE_TYPE.DISK],
-        type: 'line' as const,
-        smooth: true,
         data: diskPoints.map((p) => p.value),
-        itemStyle: { color: '#f59e0b' },
+        color: '#f59e0b',
+        lineWidth: 2,
       },
     ],
   }
 
-  return <ReactECharts option={option} style={{ height: 360, width: '100%' }} />
+  return <BaseHighchart options={options} height={360} enableExport={enableExport} />
 }

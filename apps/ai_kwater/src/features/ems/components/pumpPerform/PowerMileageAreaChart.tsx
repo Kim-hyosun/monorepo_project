@@ -16,7 +16,7 @@ export default function PowerMileageAreaChart({ data, height = 220 }: Props) {
     values.map((v, i) => [data.startMs + i * data.intervalMs, v])
 
   const options: Highcharts.Options = mergeDark(baseDarkOptions(), {
-    chart: { type: 'area', height, marginTop: 50 },
+    chart: { type: 'area', height, marginTop: 70 },
     xAxis: { type: 'datetime', labels: { format: '{value:%m-%d}' } },
     yAxis: { title: { text: 'kWh' } },
     plotOptions: {
@@ -31,5 +31,5 @@ export default function PowerMileageAreaChart({ data, height = 220 }: Props) {
     })),
   })
 
-  return <BaseHighchart options={options} height={height} />
+  return <BaseHighchart options={options} height={height} enableRangeSelector enableExport />
 }

@@ -5,17 +5,13 @@ import { useEffect, useState } from 'react'
 
 import { AioPanel } from '@/shared/components/AioPanel'
 import { TopNavigator } from '@/shared/components/TopNavigator'
+import { FilterLeftContents } from '@/features/filter/components/FilterLeftContents'
+import { FilterRightContents } from '@/features/filter/components/FilterRightContents'
+import { ProcessHero } from '@/shared/components/ProcessHero'
 import { ProcessPageHeader } from '@/shared/components/ProcessPageHeader'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { Input } from '@/shared/ui/input'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/shared/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
 import {
   useFilterLatestQuery,
   useUpdateFilterBackwash,
@@ -24,10 +20,18 @@ import {
 import { dialog } from '@/libs/dialog'
 import type { OperationMode } from '@/shared/components/ModeToggleBar'
 
-const TrendLineChart = dynamic(
-  () => import('@/features/receiving/components/TrendLineChart'),
-  { ssr: false, loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div> },
-)
+const TrendLineChart = dynamic(() => import('@/features/receiving/components/TrendLineChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
+const AILocationChart = dynamic(() => import('@/shared/components/charts/AILocationChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
+const AILocationChartS = dynamic(() => import('@/shared/components/charts/AILocationChartS'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
 
 interface Props {
   step: 3 | 4
@@ -81,6 +85,7 @@ export function FilterPage({ step }: Props) {
   return (
     <div className='-m-6 min-h-screen space-y-4 p-6 text-white' style={DARK_WRAPPER_STYLE}>
       <TopNavigator variant='dark' />
+      <ProcessHero cubeKey='filter' title='여과 공정' subtitle='역세주기 / 손실 수두' />
       <ProcessPageHeader
         variant='dark'
         title={`여과 — 알고리즘 (${step}단계)`}
@@ -92,6 +97,9 @@ export function FilterPage({ step }: Props) {
         onSave={onSave}
         saveDisabled={isPending}
       />
+
+      <FilterLeftContents data={data} />
+      <FilterRightContents data={data} />
 
       <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
         {isModifyMode ? (
@@ -106,7 +114,13 @@ export function FilterPage({ step }: Props) {
         ) : (
           <KpiCard variant='dark' label='역세 주기' value={data.bw_interval} unit='시간' />
         )}
-        <KpiCard variant='dark' highlight label='AI 역세 추천 주기' value={data.ai_bw_interval} unit='시간' />
+        <KpiCard
+          variant='dark'
+          highlight
+          label='AI 역세 추천 주기'
+          value={data.ai_bw_interval}
+          unit='시간'
+        />
         <KpiCard variant='dark' label='여과 손실 수두' value={loss} unit='m' />
         <KpiCard variant='dark' highlight label='AI 손실 수두 예측' value={aiLoss} unit='m' />
         <KpiCard variant='dark' label='출구 탁도' value={data.f_out_tb} unit='NTU' />
@@ -146,7 +160,32 @@ export function FilterPage({ step }: Props) {
 
       {data.ai_f_loss_head_trend ? (
         <AioPanel className='p-4'>
-          <TrendLineChart dark data={data.ai_f_loss_head_trend} title='AI 손실 수두 트렌드' yLabel='m' />
+          <TrendLineChart
+            dark
+            data={data.ai_f_loss_head_trend}
+            title='AI 손실 수두 트렌드'
+            yLabel='m'
+          />
+        </AioPanel>
+      ) : null}
+
+      {data.f_water_level_trend && data.ai_recommend_bands ? (
+        <AioPanel className='p-4'>
+          {step === 4 ? (
+            <AILocationChartS
+              data={data.f_water_level_trend}
+              compareData={data.f_water_level_trend.map(([t, v]): [number, number] => [
+                t,
+                v * 0.92,
+              ])}
+              aiRecommendBands={data.ai_recommend_bands}
+            />
+          ) : (
+            <AILocationChart
+              data={data.f_water_level_trend}
+              aiRecommendBands={data.ai_recommend_bands}
+            />
+          )}
         </AioPanel>
       ) : null}
     </div>

@@ -13,6 +13,8 @@ export const pmsApi = {
   getMotor: (id: string) =>
     api.get<PmsMotorDetailResponse>(`/pms/motors/${id}`).then((res) => res.data),
   listAlerts: () => api.get<PmsAlertsResponse>('/pms/alerts').then((res) => res.data),
+  markAlertRead: (num: number) =>
+    api.put<{ ok: true }>(`/pms/alerts/${num}/read`).then((res) => res.data),
   getProcessStatus: () =>
     api.get<PmsProcessStatusResponse>('/pms/process-status').then((res) => res.data),
 }

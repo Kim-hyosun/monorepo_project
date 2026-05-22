@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from 'react'
+
 import { AioPageHeader } from '@/shared/components/AioPageHeader'
 import { AioPanel } from '@/shared/components/AioPanel'
 import { ModeToggleBar, type OperationMode } from '@/shared/components/ModeToggleBar'
+import { cn } from '@/shared/utils/cn'
 import {
   useCoagulantsLatestQuery,
   useUpdateCoagulantsOperation,
@@ -20,10 +23,7 @@ import {
   useMixingLatestQuery,
   useUpdateMixingOperation,
 } from '@/features/mixing/queries/mixingQueries'
-import {
-  useOzoneLatestQuery,
-  useUpdateOzoneOperation,
-} from '@/features/ozone/queries/ozoneQueries'
+import { useOzoneLatestQuery, useUpdateOzoneOperation } from '@/features/ozone/queries/ozoneQueries'
 import {
   useReceivingLatestQuery,
   useUpdateReceivingOperation,
@@ -127,6 +127,17 @@ export function OperationBoard() {
     },
   ]
 
+  return <OperationBoardView rows={rows} />
+}
+
+type Stage = '3' | '4'
+const STAGE_TABS: Array<{ key: Stage; label: string }> = [
+  { key: '3', label: '자율운영 3단계' },
+  { key: '4', label: '자율운영 4단계' },
+]
+
+function OperationBoardView({ rows }: { rows: ProcessRow[] }) {
+  const [stage, setStage] = useState<Stage>('3')
   return (
     <div
       className='-m-6 min-h-screen space-y-6 p-6 text-white'
@@ -136,52 +147,43 @@ export function OperationBoard() {
     >
       <AioPageHeader title='AI 자율운영 주요감시현황' center />
 
-      <div className='grid gap-6 md:grid-cols-2'>
-        <Column title='자율운영 3단계'>
-          {rows.map((row) => (
-            <ProcessCard
-              key={`3-${row.name}`}
-              name={row.name}
-              mode={row.mode}
-              onModeChange={row.onModeChange}
-              metric={row.kpiThree}
-            />
-          ))}
-        </Column>
-
-        <Column title='자율운영 4단계' withDivider>
-          {rows.map((row) => (
-            <ProcessCard
-              key={`4-${row.name}`}
-              name={row.name}
-              mode={row.mode}
-              onModeChange={row.onModeChange}
-              metric={row.kpiFour}
-            />
-          ))}
-        </Column>
+      <div className='flex flex-wrap gap-1 rounded-md border border-[var(--aio-panel-border)] bg-[var(--aio-panel)] p-1'>
+        {STAGE_TABS.map((t) => (
+          <button
+            key={t.key}
+            type='button'
+            onClick={() => setStage(t.key)}
+            className={cn(
+              'rounded px-3 py-1.5 text-xs font-medium transition',
+              stage === t.key
+                ? 'bg-[var(--aio-accent)]/30 text-white'
+                : 'text-[var(--aio-subtitle)] hover:bg-white/5',
+            )}
+            style={stage === t.key ? { textShadow: 'var(--aio-text-glow)' } : undefined}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
+
+      <Column title={stage === '3' ? '자율운영 3단계' : '자율운영 4단계'}>
+        {rows.map((row) => (
+          <ProcessCard
+            key={`${stage}-${row.name}`}
+            name={row.name}
+            mode={row.mode}
+            onModeChange={row.onModeChange}
+            metric={stage === '3' ? row.kpiThree : row.kpiFour}
+          />
+        ))}
+      </Column>
     </div>
   )
 }
 
-function Column({
-  title,
-  children,
-  withDivider,
-}: {
-  title: string
-  children: React.ReactNode
-  withDivider?: boolean
-}) {
+function Column({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section
-      className={
-        withDivider
-          ? 'space-y-3 border-l border-[var(--aio-panel-border)] pl-4'
-          : 'space-y-3'
-      }
-    >
+    <section className='space-y-3'>
       <div
         className='rounded-md px-6 py-2 text-center text-lg font-semibold text-white'
         style={{

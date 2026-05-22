@@ -9,17 +9,20 @@ interface Props {
   className?: string
 }
 
-const DARK_WRAPPER_STYLE = {
-  background: 'linear-gradient(180deg, var(--aio-bg) 0%, #0a0f1a 100%)',
-} as const
-
 export function PmsPageWrapper({ children, className }: Props) {
   return (
     <div
-      className={cn('-m-6 min-h-screen space-y-4 p-6 text-white', className)}
-      style={DARK_WRAPPER_STYLE}
+      className={cn('relative -m-6 min-h-screen space-y-4 p-6 text-white', className)}
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(16,19,32,0.94) 0%, rgba(10,15,26,0.97) 100%), url(/pms/main-background.png) center/cover fixed',
+      }}
     >
-      {children}
+      <div
+        aria-hidden
+        className='pointer-events-none absolute inset-0 bg-[url(/pms/bg.png)] bg-center bg-no-repeat opacity-10'
+      />
+      <div className='relative'>{children}</div>
     </div>
   )
 }

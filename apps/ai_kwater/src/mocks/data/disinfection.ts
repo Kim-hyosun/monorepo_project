@@ -1,4 +1,7 @@
-import type { DisinfectionLatest, DisinfectionStage } from '@/features/disinfection/types/disinfection'
+import type {
+  DisinfectionLatest,
+  DisinfectionStage,
+} from '@/features/disinfection/types/disinfection'
 
 const now = Date.now()
 const trend: Array<[number, number]> = Array.from({ length: 60 }, (_, i) => [
@@ -27,4 +30,5 @@ export const seedDisinfectionLatest: DisinfectionLatest = {
     after: baseStage(0.25),
   },
   ai_cl_dose_trend: trend,
+  cl_pump_states: { pre: true, mid: true, after: true },
 }

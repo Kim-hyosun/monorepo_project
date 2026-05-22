@@ -16,7 +16,7 @@ export default function EnergySaveTrendChart({ trend, height = 250 }: Props) {
     arr.map((v, i) => [trend.startMs + i * trend.intervalMs, v])
 
   const options: Highcharts.Options = mergeDark(baseDarkOptions(), {
-    chart: { height, marginTop: 50 },
+    chart: { height, marginTop: 70 },
     xAxis: { type: 'datetime', labels: { format: '{value:%m-%d}' } },
     yAxis: [
       {
@@ -63,5 +63,13 @@ export default function EnergySaveTrendChart({ trend, height = 250 }: Props) {
     ],
   })
 
-  return <BaseHighchart options={options} height={height} />
+  return (
+    <BaseHighchart
+      options={options}
+      height={height}
+      enableNavigator
+      enableRangeSelector
+      enableExport
+    />
+  )
 }

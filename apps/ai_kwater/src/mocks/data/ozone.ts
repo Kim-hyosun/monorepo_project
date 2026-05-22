@@ -8,4 +8,6 @@ export const seedOzoneLatest: OzoneLatest = {
   ai_oz_dose: 1.15,
   oz_residual: 0.18,
   oz_flow: 320,
+  oz_generator_states: [true, false],
+  oz_generator_load: 72,
 }

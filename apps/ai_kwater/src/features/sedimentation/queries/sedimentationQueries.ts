@@ -15,7 +15,7 @@ export function useSedimentationLatestQuery() {
   return useQuery({
     queryKey: sedimentationKeys.latest(),
     queryFn: async () => (await sedimentationApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

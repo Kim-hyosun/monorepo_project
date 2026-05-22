@@ -17,4 +17,6 @@ export const seedMixingLatest: MixingLatest = {
   mixer_rpm: 145,
   ai_mixer_rpm: 142,
   ai_g_value_trend: trend,
+  gt_value: 19_040,
+  mixer_rpms: [148, 142],
 }

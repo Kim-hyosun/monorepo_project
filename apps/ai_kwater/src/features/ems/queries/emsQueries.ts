@@ -32,12 +32,8 @@ export const emsKeys = {
   sujiSelect2: (reservoir: string) => [...emsKeys.all, 'suji-select2', reservoir] as const,
   zoneUsage: (granularity: PumpPerformGranularity, from: string, to: string) =>
     [...emsKeys.all, 'zone-usage', granularity, from, to] as const,
-  facUsage: (
-    granularity: PumpPerformGranularity,
-    facility: number,
-    from: string,
-    to: string,
-  ) => [...emsKeys.all, 'fac-usage', granularity, facility, from, to] as const,
+  facUsage: (granularity: PumpPerformGranularity, facility: number, from: string, to: string) =>
+    [...emsKeys.all, 'fac-usage', granularity, facility, from, to] as const,
   useTrend: (granularity: PumpPerformGranularity, from: string, to: string) =>
     [...emsKeys.all, 'use-trend', granularity, from, to] as const,
 }
@@ -46,7 +42,7 @@ export function useEmsLatestQuery() {
   return useQuery({
     queryKey: emsKeys.latest(),
     queryFn: async () => (await emsApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -130,7 +126,7 @@ export function useEmsFactorQuery() {
   return useQuery({
     queryKey: emsKeys.factor(),
     queryFn: async () => (await emsApi.getFactor()).factor,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -138,7 +134,7 @@ export function useEmsZonesQuery() {
   return useQuery({
     queryKey: emsKeys.zones(),
     queryFn: async () => (await emsApi.listZones()).zones,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -146,7 +142,7 @@ export function useEmsReservoirsQuery() {
   return useQuery({
     queryKey: emsKeys.reservoirs(),
     queryFn: async () => (await emsApi.listReservoirs()).reservoirs,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -154,7 +150,7 @@ export function useEmsDrParticipationQuery() {
   return useQuery({
     queryKey: emsKeys.drParticipation(),
     queryFn: async () => (await emsApi.getDrParticipation()).dr,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -162,7 +158,7 @@ export function useEmsAnalysisQuery() {
   return useQuery({
     queryKey: emsKeys.analysis(),
     queryFn: async () => (await emsApi.getAnalysis()).analysis,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -170,7 +166,7 @@ export function useEmsSongsuQuery() {
   return useQuery({
     queryKey: emsKeys.songsu(),
     queryFn: async () => (await emsApi.getSongsu()).songsu,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 
@@ -215,8 +211,7 @@ export function useEmsSujiSelectQuery(
 export function useEmsSujiSelect2Query(reservoir: string) {
   return useQuery({
     queryKey: emsKeys.sujiSelect2(reservoir),
-    queryFn: async () =>
-      (await emsApi.getSujiSelect2(reservoir || undefined)).suji2,
+    queryFn: async () => (await emsApi.getSujiSelect2(reservoir || undefined)).suji2,
   })
 }
 
@@ -241,22 +236,12 @@ export function useEmsFacUsageQuery(
   return useQuery({
     queryKey: emsKeys.facUsage(granularity, facility, from, to),
     queryFn: async () =>
-      (
-        await emsApi.getFacUsage(
-          granularity,
-          facility,
-          from || undefined,
-          to || undefined,
-        )
-      ).facUsage,
+      (await emsApi.getFacUsage(granularity, facility, from || undefined, to || undefined))
+        .facUsage,
   })
 }
 
-export function useEmsUseTrendQuery(
-  granularity: PumpPerformGranularity,
-  from: string,
-  to: string,
-) {
+export function useEmsUseTrendQuery(granularity: PumpPerformGranularity, from: string, to: string) {
   return useQuery({
     queryKey: emsKeys.useTrend(granularity, from, to),
     queryFn: async () =>

@@ -12,7 +12,7 @@ export function useGacLatestQuery() {
   return useQuery({
     queryKey: gacKeys.latest(),
     queryFn: async () => (await gacApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

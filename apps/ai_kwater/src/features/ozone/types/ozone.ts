@@ -13,7 +13,11 @@ export interface OzoneLatest {
   oz_residual: number | null
   /** 처리량 */
   oz_flow: number | null
-  [key: string]: number | string | null
+  /** 오존 발생기 2기 ON/OFF */
+  oz_generator_states: boolean[] | null
+  /** 오존 발생기 부하 (%) */
+  oz_generator_load: number | null
+  [key: string]: number | string | boolean[] | null
 }
 
 export interface OzoneLatestResponse {

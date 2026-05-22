@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start --port 3002",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -18,8 +20,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "echarts": "^5.5.0",
-    "echarts-for-react": "^3.0.2",
     "highcharts": "^11.4.0",
     "highcharts-react-official": "^3.2.1",
     "js-cookie": "^3.0.5",
@@ -39,16 +39,22 @@
     "@eslint/eslintrc": "^3.2.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@tanstack/react-query-devtools": "^5.100.10",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.12.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.0.0",
     "eslint": "^9",
     "eslint-config-next": "^15.5.18",
     "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^26.0.0",
     "postcss": "^8",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.0"
   },
   "msw": {
     "workerDirectory": [

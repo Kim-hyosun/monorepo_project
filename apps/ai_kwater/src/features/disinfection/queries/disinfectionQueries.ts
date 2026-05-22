@@ -15,7 +15,7 @@ export function useDisinfectionLatestQuery() {
   return useQuery({
     queryKey: disinfectionKeys.latest(),
     queryFn: async () => (await disinfectionApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

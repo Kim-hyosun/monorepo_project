@@ -11,6 +11,6 @@ export function useRawLatestQuery() {
   return useQuery({
     queryKey: rawKeys.latest(),
     queryFn: async () => (await rawApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }

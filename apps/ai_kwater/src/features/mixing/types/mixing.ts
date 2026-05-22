@@ -18,7 +18,11 @@ export interface MixingLatest {
   ai_mixer_rpm: number | null
   /** G값 트렌드 */
   ai_g_value_trend: Array<[number, number]> | null
-  [key: string]: number | string | Array<[number, number]> | null
+  /** G·t 값 */
+  gt_value: number | null
+  /** 혼화기 2기 RPM */
+  mixer_rpms: number[] | null
+  [key: string]: number | string | number[] | Array<[number, number]> | null
 }
 
 export interface MixingLatestResponse {

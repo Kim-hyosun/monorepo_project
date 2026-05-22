@@ -19,7 +19,11 @@ export interface CoagulantsLatest {
   recommend_cg_dose: number | null
   /** AI 응집제 주입율 시계열 */
   ai_cg_dose_trend: Array<[number, number]> | null
-  [key: string]: number | string | Array<[number, number]> | null
+  /** 잔류 응집제 (mg/L) */
+  cg_residual: number | null
+  /** 응집제 주입 펌프 4기 ON/OFF */
+  cg_pump_states: boolean[] | null
+  [key: string]: number | string | boolean[] | Array<[number, number]> | null
 }
 
 export interface CoagulantsLatestResponse {

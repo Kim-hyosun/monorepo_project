@@ -28,6 +28,12 @@ export interface DisinfectionLatest {
   }
   /** 추천 주입율 트렌드 (후염소 기준) */
   ai_cl_dose_trend: Array<[number, number]> | null
+  /** 염소 투입 펌프 ON/OFF — pre/mid/after */
+  cl_pump_states: {
+    pre: boolean | null
+    mid: boolean | null
+    after: boolean | null
+  } | null
   [key: string]: unknown
 }
 

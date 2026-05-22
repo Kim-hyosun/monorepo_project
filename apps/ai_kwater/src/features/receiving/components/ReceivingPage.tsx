@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react'
 
 import { AioPanel } from '@/shared/components/AioPanel'
 import { TopNavigator } from '@/shared/components/TopNavigator'
+import { ProcessHero } from '@/shared/components/ProcessHero'
 import { ProcessPageHeader } from '@/shared/components/ProcessPageHeader'
+import { ReceivingLeftContents } from '@/features/receiving/components/ReceivingLeftContents'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { Input } from '@/shared/ui/input'
 import {
@@ -16,10 +18,14 @@ import {
 import { dialog } from '@/libs/dialog'
 import type { OperationMode } from '@/shared/components/ModeToggleBar'
 
-const TrendLineChart = dynamic(
-  () => import('@/features/receiving/components/TrendLineChart'),
-  { ssr: false, loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div> },
-)
+const TrendLineChart = dynamic(() => import('@/features/receiving/components/TrendLineChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
+const ReceivingHighchart = dynamic(() => import('@/shared/components/charts/ReceivingHighchart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
 
 interface Props {
   step: 3 | 4
@@ -74,6 +80,11 @@ export function ReceivingPage({ step }: Props) {
   return (
     <div className='-m-6 min-h-screen space-y-4 p-6 text-white' style={DARK_WRAPPER_STYLE}>
       <TopNavigator variant='dark' />
+      <ProcessHero
+        cubeKey='receiving'
+        title='착수 공정'
+        subtitle='원수 유입 / 정수지 수위 모니터링'
+      />
       <ProcessPageHeader
         variant='dark'
         title={`착수 — 알고리즘 (${step}단계)`}
@@ -86,34 +97,86 @@ export function ReceivingPage({ step }: Props) {
         saveDisabled={isPending}
       />
 
+      <ReceivingLeftContents data={data} />
+
       <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
         {isModifyMode ? (
           <>
-            <DarkModifyField label='정수지 최대 목표 수위 (m)' value={draftMax} onChange={setDraftMax} />
-            <DarkModifyField label='정수지 최소 목표 수위 (m)' value={draftMin} onChange={setDraftMin} />
+            <DarkModifyField
+              label='정수지 최대 목표 수위 (m)'
+              value={draftMax}
+              onChange={setDraftMax}
+            />
+            <DarkModifyField
+              label='정수지 최소 목표 수위 (m)'
+              value={draftMin}
+              onChange={setDraftMin}
+            />
           </>
         ) : (
           <>
-            <KpiCard variant='dark' label='정수지 최대 목표' value={data.h_target_le_max} unit='m' />
-            <KpiCard variant='dark' label='정수지 최소 목표' value={data.h_target_le_min} unit='m' />
+            <KpiCard
+              variant='dark'
+              label='정수지 최대 목표'
+              value={data.h_target_le_max}
+              unit='m'
+            />
+            <KpiCard
+              variant='dark'
+              label='정수지 최소 목표'
+              value={data.h_target_le_min}
+              unit='m'
+            />
           </>
         )}
         <KpiCard variant='dark' label='원수 유입 유량' value={inflow} unit='m³/h' />
         <KpiCard variant='dark' label='1차 원수 조절 밸브' value={valve} unit='%' />
         <KpiCard variant='dark' label='정수지#1 수위' value={level} unit='m' />
-        <KpiCard variant='dark' highlight label='AI 정수지 유입 예측' value={data.ai_b1_in_fr} unit='m³/h' />
+        <KpiCard
+          variant='dark'
+          highlight
+          label='AI 정수지 유입 예측'
+          value={data.ai_b1_in_fr}
+          unit='m³/h'
+        />
       </div>
 
       {data.ai_b_in_fr_trend ? (
         <AioPanel className='p-4'>
-          <TrendLineChart dark data={data.ai_b_in_fr_trend} title='원수 유입 유량 트렌드' yLabel='m³/h' />
+          <TrendLineChart
+            dark
+            data={data.ai_b_in_fr_trend}
+            title='원수 유입 유량 트렌드'
+            yLabel='m³/h'
+          />
+        </AioPanel>
+      ) : null}
+
+      {data.ai_b_in_fr_trend ? (
+        <AioPanel className='p-4'>
+          <ReceivingHighchart
+            inflowTrend={data.ai_b_in_fr_trend}
+            aiPredictTrend={data.ai_b_in_fr_trend.map(([t, v]) => [t, v * 1.05])}
+            targetRange={{
+              min: typeof data.h_target_le_min === 'number' ? data.h_target_le_min * 700 : 3000,
+              max: typeof data.h_target_le_max === 'number' ? data.h_target_le_max * 700 : 4500,
+            }}
+          />
         </AioPanel>
       ) : null}
     </div>
   )
 }
 
-function DarkModifyField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function DarkModifyField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+}) {
   return (
     <div className='rounded-lg border border-[var(--aio-accent)]/50 bg-[var(--aio-panel)] p-4'>
       <div className='text-xs text-[var(--aio-subtitle)]'>{label}</div>

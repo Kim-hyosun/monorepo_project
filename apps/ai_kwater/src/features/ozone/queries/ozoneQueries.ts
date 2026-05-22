@@ -12,7 +12,7 @@ export function useOzoneLatestQuery() {
   return useQuery({
     queryKey: ozoneKeys.latest(),
     queryFn: async () => (await ozoneApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

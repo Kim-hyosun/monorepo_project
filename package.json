@@ -8,9 +8,12 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
-    "clean": "turbo clean && rm -rf node_modules"
+    "clean": "turbo clean && rm -rf node_modules",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
     "prettier": "^3.8.2",
     "turbo": "^2.3.0",
     "typescript": "^5"
@@ -19,5 +22,11 @@
     "overrides": {
       "postcss": "^8.5.10"
     }
+  },
+  "lint-staged": {
+    "apps/ai_kwater/**/*.{ts,tsx}": [
+      "prettier --write",
+      "pnpm --filter ai_kwater exec eslint --fix --no-warn-ignored"
+    ]
   }
 }

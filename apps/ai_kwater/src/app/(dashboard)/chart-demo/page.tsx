@@ -18,13 +18,12 @@ export default function ChartDemoPage() {
       <div>
         <h2 className='mb-2 text-xl font-semibold'>차트 데모</h2>
         <p className='text-muted-foreground text-sm'>
-          echarts-for-react / highcharts-react-official 둘 다 dynamic import + ssr:false 패턴으로
-          로드.
+          Highcharts 단일 stack — dynamic import + ssr:false 패턴으로 로드.
         </p>
       </div>
 
       <section className='rounded-lg border p-4'>
-        <h3 className='mb-3 text-sm font-medium'>ECharts (bar)</h3>
+        <h3 className='mb-3 text-sm font-medium'>Highcharts (column)</h3>
         <EChartsBars />
       </section>
 

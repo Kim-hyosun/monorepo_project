@@ -1,6 +1,9 @@
 'use client'
 
 import { TopNavigator } from '@/shared/components/TopNavigator'
+import { OzoneLeftContents } from '@/features/ozone/components/OzoneLeftContents'
+import { OzoneRightContents } from '@/features/ozone/components/OzoneRightContents'
+import { ProcessHero } from '@/shared/components/ProcessHero'
 import { ProcessPageHeader } from '@/shared/components/ProcessPageHeader'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { useOzoneLatestQuery, useUpdateOzoneOperation } from '@/features/ozone/queries/ozoneQueries'
@@ -21,12 +24,16 @@ export function OzonePage() {
   return (
     <div className='-m-6 min-h-screen space-y-4 p-6 text-white' style={DARK_WRAPPER_STYLE}>
       <TopNavigator variant='dark' />
+      <ProcessHero cubeKey='ozone' title='오존 공정' subtitle='오존 주입율' />
       <ProcessPageHeader
         variant='dark'
         title='오존 — 알고리즘'
         mode={data?.operation_mode ?? null}
         onModeChange={onModeChange}
       />
+
+      {data ? <OzoneLeftContents data={data} /> : null}
+      {data ? <OzoneRightContents data={data} /> : null}
 
       {isLoading ? (
         <div className='text-[var(--aio-subtitle)] text-sm'>로딩 중…</div>
@@ -36,7 +43,13 @@ export function OzonePage() {
         <div className='grid grid-cols-2 gap-3 md:grid-cols-5'>
           <KpiCard variant='dark' label='오존 농도' value={data.oz_density} unit='mg/L' />
           <KpiCard variant='dark' label='오존 주입율' value={data.oz_dose} unit='mg/L' />
-          <KpiCard variant='dark' highlight label='AI 오존 주입율' value={data.ai_oz_dose} unit='mg/L' />
+          <KpiCard
+            variant='dark'
+            highlight
+            label='AI 오존 주입율'
+            value={data.ai_oz_dose}
+            unit='mg/L'
+          />
           <KpiCard variant='dark' label='잔류 오존' value={data.oz_residual} unit='mg/L' />
           <KpiCard variant='dark' label='처리량' value={data.oz_flow} unit='m³/h' />
         </div>

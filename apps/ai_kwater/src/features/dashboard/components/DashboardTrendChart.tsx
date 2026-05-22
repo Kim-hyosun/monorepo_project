@@ -1,60 +1,50 @@
 'use client'
 
-import ReactECharts from 'echarts-for-react'
+import type Highcharts from 'highcharts'
+
+import BaseHighchart from '@/features/ems/components/highcharts/BaseHighchart'
+import { baseDarkOptions, mergeDark } from '@/features/ems/components/highcharts/highchartsBase'
 
 interface Props {
   data: Array<[number, number]>
   title: string
   yLabel?: string
+  enableExport?: boolean
+}
+
+const DARK_GRADIENT: Highcharts.GradientColorObject = {
+  linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+  stops: [
+    [0, 'rgba(92,175,255,0.4)'],
+    [1, 'rgba(92,175,255,0)'],
+  ],
 }
 
 /**
  * Dashboard 전용 다크 테마 트렌드 차트.
  * 일반 light 트렌드 차트는 features/receiving/components/TrendLineChart 사용.
  */
-export default function DashboardTrendChart({ data, title, yLabel }: Props) {
-  const option = {
-    backgroundColor: 'transparent',
-    title: { text: title, textStyle: { fontSize: 13, color: '#c3eaff' } },
-    tooltip: { trigger: 'axis' as const, backgroundColor: 'rgba(0,6,77,0.85)', borderColor: '#5cafff', textStyle: { color: '#fff' } },
-    grid: { left: 60, right: 30, top: 40, bottom: 30 },
-    xAxis: {
-      type: 'time' as const,
-      axisLine: { lineStyle: { color: '#5cafff88' } },
-      axisLabel: { color: '#c3eaff' },
-      splitLine: { lineStyle: { color: 'rgba(139, 194, 240, 0.1)' } },
+export default function DashboardTrendChart({ data, title, yLabel, enableExport }: Props) {
+  const options: Highcharts.Options = mergeDark(baseDarkOptions(), {
+    chart: { height: 280, marginTop: 50 },
+    title: {
+      text: title,
+      style: { color: '#c3eaff', fontSize: '13px' },
+      align: 'left',
     },
-    yAxis: {
-      type: 'value' as const,
-      name: yLabel,
-      nameTextStyle: { color: '#c3eaff' },
-      axisLine: { lineStyle: { color: '#5cafff88' } },
-      axisLabel: { color: '#c3eaff' },
-      splitLine: { lineStyle: { color: 'rgba(139, 194, 240, 0.1)' } },
-    },
+    xAxis: { type: 'datetime', labels: { format: '{value:%m-%d %H:%M}' } },
+    yAxis: { title: { text: yLabel } },
     series: [
       {
-        type: 'line' as const,
-        smooth: true,
-        showSymbol: false,
+        type: 'area',
+        name: title,
         data,
-        itemStyle: { color: '#5cafff' },
-        lineStyle: { width: 2, shadowColor: '#5cafff', shadowBlur: 10 },
-        areaStyle: {
-          color: {
-            type: 'linear' as const,
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [
-              { offset: 0, color: 'rgba(92, 175, 255, 0.4)' },
-              { offset: 1, color: 'rgba(92, 175, 255, 0)' },
-            ],
-          },
-        },
+        color: '#5cafff',
+        lineWidth: 2,
+        fillColor: DARK_GRADIENT,
       },
     ],
-  }
-  return <ReactECharts option={option} style={{ height: 280, width: '100%' }} />
+  })
+
+  return <BaseHighchart options={options} height={280} enableExport={enableExport} />
 }

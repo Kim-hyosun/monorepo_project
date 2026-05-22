@@ -120,13 +120,7 @@ export interface EnergyFactor {
 }
 
 /** 정수장 zone (건물) */
-export type ZoneCode =
-  | '탈수기동'
-  | '오존설비동'
-  | '관리동'
-  | '송수펌프동'
-  | '염소투입동'
-  | '원수동'
+export type ZoneCode = '탈수기동' | '오존설비동' | '관리동' | '송수펌프동' | '염소투입동' | '원수동'
 
 export interface ZoneFacility {
   name: string
@@ -480,6 +474,8 @@ export interface ZoneRow {
 export interface ChartCategoryValue {
   name: string
   value: number
+  /** drilldown 1depth — 하위 카테고리 */
+  children?: ChartCategoryValue[]
 }
 
 export interface ChartTrendSeries {

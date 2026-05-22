@@ -19,7 +19,33 @@ export interface SedimentationLatest {
   ai_sd_purge_interval: number | null
   /** 침전지 출구 탁도 트렌드 */
   ai_e_out_tb_trend: Array<[number, number]> | null
-  [key: string]: number | string | Array<[number, number]> | null
+  /** 슬러지 배출 밸브 3기 (%) */
+  sludge_valves: number[] | null
+  /** AI 침전 탁도 예측 시계열 */
+  ai_e_out_tb_predict: Array<[number, number]> | null
+  /** 슬러지 농도 시계열 */
+  sd_density_trend: Array<[number, number]> | null
+  /** 슬러지 배출 schedule — xrange Gantt */
+  purge_schedule: Array<{
+    line: number
+    label: string
+    start: number
+    end: number
+    state: 'scheduled' | 'active' | 'done'
+  }> | null
+  [key: string]:
+    | number
+    | string
+    | number[]
+    | Array<[number, number]>
+    | Array<{
+        line: number
+        label: string
+        start: number
+        end: number
+        state: 'scheduled' | 'active' | 'done'
+      }>
+    | null
 }
 
 export interface SedimentationLatestResponse {

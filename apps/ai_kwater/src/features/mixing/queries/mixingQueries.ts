@@ -12,7 +12,7 @@ export function useMixingLatestQuery() {
   return useQuery({
     queryKey: mixingKeys.latest(),
     queryFn: async () => (await mixingApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

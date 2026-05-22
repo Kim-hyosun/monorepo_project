@@ -32,7 +32,20 @@ export interface FilterLatest {
   schedule: FilterScheduleEntry[] | null
   /** 손실 수두 트렌드 */
   ai_f_loss_head_trend: Array<[number, number]> | null
-  [key: string]: number | string | Array<[number, number]> | FilterScheduleEntry[] | null
+  /** 여과지 6기 ON/OFF */
+  f_states: boolean[] | null
+  /** 여과지 수위 (m) 시계열 */
+  f_water_level_trend: Array<[number, number]> | null
+  /** AI 추천 역세 구간 — xAxis plotBand */
+  ai_recommend_bands: Array<{ from: number; to: number; label?: string }> | null
+  [key: string]:
+    | number
+    | string
+    | boolean[]
+    | Array<[number, number]>
+    | Array<{ from: number; to: number; label?: string }>
+    | FilterScheduleEntry[]
+    | null
 }
 
 export interface FilterLatestResponse {

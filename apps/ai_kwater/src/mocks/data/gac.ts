@@ -17,4 +17,5 @@ export const seedGacLatest: GacLatest = {
   ai_bw_interval: 44,
   g_running_count: 4,
   ai_g_loss_head_trend: trend,
+  gac_states: [true, true, true, false],
 }

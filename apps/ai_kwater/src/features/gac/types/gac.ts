@@ -19,7 +19,9 @@ export interface GacLatest {
   g_running_count: number | null
   /** 손실 수두 트렌드 */
   ai_g_loss_head_trend: Array<[number, number]> | null
-  [key: string]: number | string | Array<[number, number]> | null
+  /** GAC 4기 ON/OFF */
+  gac_states: boolean[] | null
+  [key: string]: number | string | boolean[] | Array<[number, number]> | null
 }
 
 export interface GacLatestResponse {

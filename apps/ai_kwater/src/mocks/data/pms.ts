@@ -55,13 +55,85 @@ function generateMotors(): PumpMotor[] {
 
 export const seedMotors: PumpMotor[] = generateMotors()
 
+/** 가변 큐 — mock handler 에서 push/markRead 가능 */
 export const seedAlerts: PmsAlert[] = [
-  { num: 1, time: '2026-05-20 14:25', list: '평택계통 송수펌프모터 #3', info: 'DE 진동', status: '경보' },
-  { num: 2, time: '2026-05-20 14:10', list: '평택계통 송수펌프모터 #3', info: '온도 상승', status: '경보' },
-  { num: 3, time: '2026-05-20 13:55', list: 'GAC 가압펌프 #1', info: '전류 이상', status: '주의' },
-  { num: 4, time: '2026-05-20 12:30', list: '안성계통 송수펌프모터 #2', info: '점검 요청', status: '주의' },
-  { num: 5, time: '2026-05-20 10:05', list: '오존 송풍기 #1', info: '주의', status: '주의' },
+  {
+    num: 1,
+    time: '2026-05-20 14:25',
+    list: '평택계통 송수펌프모터 #3',
+    info: 'DE 진동',
+    status: '경보',
+    read: false,
+  },
+  {
+    num: 2,
+    time: '2026-05-20 14:10',
+    list: '평택계통 송수펌프모터 #3',
+    info: '온도 상승',
+    status: '경보',
+    read: false,
+  },
+  {
+    num: 3,
+    time: '2026-05-20 13:55',
+    list: 'GAC 가압펌프 #1',
+    info: '전류 이상',
+    status: '주의',
+    read: true,
+  },
+  {
+    num: 4,
+    time: '2026-05-20 12:30',
+    list: '안성계통 송수펌프모터 #2',
+    info: '점검 요청',
+    status: '주의',
+    read: true,
+  },
+  {
+    num: 5,
+    time: '2026-05-20 10:05',
+    list: '오존 송풍기 #1',
+    info: '주의',
+    status: '주의',
+    read: true,
+  },
 ]
+
+const ALERT_TEMPLATES = [
+  { list: '평택계통 송수펌프모터 #1', info: 'DE 진동', status: '경보' },
+  { list: '안성계통 송수펌프모터 #4', info: '온도 경고', status: '주의' },
+  { list: 'GAC 가압펌프 #2', info: '전류 변동', status: '주의' },
+  { list: '오존 송풍기 #2', info: 'NDE 진동', status: '경보' },
+  { list: '여과지 역세펌프 #1', info: '베어링 마모 의심', status: '주의' },
+]
+
+let alertSeq = seedAlerts.length
+
+function pad(n: number) {
+  return String(n).padStart(2, '0')
+}
+
+/** mock handler 가 호출. 큐에 새 알람 1건 unshift. */
+export function pushNewAlert(): PmsAlert {
+  alertSeq += 1
+  const t = ALERT_TEMPLATES[alertSeq % ALERT_TEMPLATES.length]
+  const d = new Date()
+  const alert: PmsAlert = {
+    num: alertSeq,
+    time: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`,
+    list: t.list,
+    info: t.info,
+    status: t.status,
+    read: false,
+  }
+  seedAlerts.unshift(alert)
+  return alert
+}
+
+export function markAlertReadInMemory(num: number) {
+  const found = seedAlerts.find((a) => a.num === num)
+  if (found) found.read = true
+}
 
 export const seedProcess: ProcessStatus[] = [
   { index: 0, title: '착수', normal: 2, err: 0, img: 'icon1' },

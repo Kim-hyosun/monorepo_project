@@ -27,7 +27,12 @@ function nowMs() {
   return Date.now()
 }
 
-function trend(base: number, jitter: number, points = 60, stepMs = 60_000): Array<[number, number]> {
+function trend(
+  base: number,
+  jitter: number,
+  points = 60,
+  stepMs = 60_000,
+): Array<[number, number]> {
   const end = nowMs()
   return Array.from({ length: points }, (_, i) => {
     const t = end - (points - 1 - i) * stepMs
@@ -121,20 +126,97 @@ export const seedCosts: CostItem[] = Array.from({ length: 12 }, (_, i) => {
 })
 
 export const seedTags: EmsTag[] = [
-  { id: 't1', tag: 'H1.PM1.kW', label: '평택 H1 PM1 전력', unit: 'kW', category: 'pump', enabled: true },
-  { id: 't2', tag: 'H1.PM2.kW', label: '평택 H1 PM2 전력', unit: 'kW', category: 'pump', enabled: true },
-  { id: 't3', tag: 'H1.PM3.kW', label: '평택 H1 PM3 전력', unit: 'kW', category: 'pump', enabled: true },
-  { id: 't4', tag: 'H1.PM4.kW', label: '평택 H1 PM4 전력', unit: 'kW', category: 'pump', enabled: false },
-  { id: 't5', tag: 'H2.PM1.kW', label: '안성 H2 PM1 전력', unit: 'kW', category: 'pump', enabled: true },
-  { id: 't6', tag: 'H2.PM2.kW', label: '안성 H2 PM2 전력', unit: 'kW', category: 'pump', enabled: true },
-  { id: 't7', tag: 'H2.SP1.kW', label: '안성 H2 SP1 전력', unit: 'kW', category: 'pump', enabled: true },
-  { id: 't8', tag: 'H2.SP2.kW', label: '안성 H2 SP2 전력', unit: 'kW', category: 'pump', enabled: false },
+  {
+    id: 't1',
+    tag: 'H1.PM1.kW',
+    label: '평택 H1 PM1 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: true,
+  },
+  {
+    id: 't2',
+    tag: 'H1.PM2.kW',
+    label: '평택 H1 PM2 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: true,
+  },
+  {
+    id: 't3',
+    tag: 'H1.PM3.kW',
+    label: '평택 H1 PM3 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: true,
+  },
+  {
+    id: 't4',
+    tag: 'H1.PM4.kW',
+    label: '평택 H1 PM4 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: false,
+  },
+  {
+    id: 't5',
+    tag: 'H2.PM1.kW',
+    label: '안성 H2 PM1 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: true,
+  },
+  {
+    id: 't6',
+    tag: 'H2.PM2.kW',
+    label: '안성 H2 PM2 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: true,
+  },
+  {
+    id: 't7',
+    tag: 'H2.SP1.kW',
+    label: '안성 H2 SP1 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: true,
+  },
+  {
+    id: 't8',
+    tag: 'H2.SP2.kW',
+    label: '안성 H2 SP2 전력',
+    unit: 'kW',
+    category: 'pump',
+    enabled: false,
+  },
   { id: 't9', tag: 'Z.POWER1', label: '구역 1 피크', unit: 'kW', category: 'peak', enabled: true },
   { id: 't10', tag: 'Z.CBL', label: 'CBL 부하', unit: 'kW', category: 'dr', enabled: true },
   { id: 't11', tag: 'Z.DR.POWER', label: 'AI DR 전력', unit: 'kW', category: 'dr', enabled: true },
-  { id: 't12', tag: 'COST.UNIT', label: '사용량 단가', unit: '원/kWh', category: 'cost', enabled: true },
-  { id: 't13', tag: 'COST.PEAK', label: '피크 단가', unit: '원/kW', category: 'cost', enabled: true },
-  { id: 't14', tag: 'MISC.AMB.TEMP', label: '외기 온도', unit: '℃', category: 'misc', enabled: true },
+  {
+    id: 't12',
+    tag: 'COST.UNIT',
+    label: '사용량 단가',
+    unit: '원/kWh',
+    category: 'cost',
+    enabled: true,
+  },
+  {
+    id: 't13',
+    tag: 'COST.PEAK',
+    label: '피크 단가',
+    unit: '원/kW',
+    category: 'cost',
+    enabled: true,
+  },
+  {
+    id: 't14',
+    tag: 'MISC.AMB.TEMP',
+    label: '외기 온도',
+    unit: '℃',
+    category: 'misc',
+    enabled: true,
+  },
 ]
 
 export const setTags = (updater: (tags: EmsTag[]) => EmsTag[]) => {
@@ -260,7 +342,13 @@ export const seedDrParticipation: DrParticipation = {
   aiTrend: trend(1_740, 200),
 }
 
-function trendSeries(start: number, end: number, points: number, base: number, amp: number): Array<number | null> {
+function trendSeries(
+  start: number,
+  end: number,
+  points: number,
+  base: number,
+  amp: number,
+): Array<number | null> {
   return Array.from({ length: points }, (_, i) => {
     const t = i / (points - 1)
     const wave = Math.sin(t * Math.PI * 2) * amp
@@ -416,7 +504,13 @@ function multiLineReservoir(
 
 export const seedSongsu: SongsuData = {
   pyeongtaek: {
-    current: { power: 770, pressure: 7.7, flow: 3_304, pumps: [true, true, false, false], freq: [] },
+    current: {
+      power: 770,
+      pressure: 7.7,
+      flow: 3_304,
+      pumps: [true, true, false, false],
+      freq: [],
+    },
     ai: { power: 720, pressure: 7.6, flow: 3_280, pumps: [true, true, true, false], freq: [] },
   },
   songsan: {
@@ -449,14 +543,7 @@ export function setSongsuAiOperation(
   seedSongsu.aiOperation[station] = config
 }
 
-const PUMP_NAMES = [
-  '평택계통1',
-  '평택계통2',
-  '평택계통3',
-  '평택계통4',
-  '평택계통5',
-  '평택계통6',
-]
+const PUMP_NAMES = ['평택계통1', '평택계통2', '평택계통3', '평택계통4', '평택계통5', '평택계통6']
 const POWER_COLORS = ['#6D5495', '#A866AD', '#846EFF', '#C2AFFF', '#EF5656', '#DB4848']
 const POWER_SERIES_NAMES = [
   '평택계통1',
@@ -535,9 +622,7 @@ export function buildSujiSelect(granularity: PumpPerformGranularity): SujiSelect
   const startMs = Date.now() - 11 * intervalMs
 
   const gen = (base: number, jitter: number, points = 12) =>
-    Array.from({ length: points }, () =>
-      Number((base + (Math.random() - 0.5) * jitter).toFixed(1)),
-    )
+    Array.from({ length: points }, () => Number((base + (Math.random() - 0.5) * jitter).toFixed(1)))
 
   return {
     granularity,
@@ -549,7 +634,12 @@ export function buildSujiSelect(granularity: PumpPerformGranularity): SujiSelect
       { key: 'valve', label: '배수지 유입 밸브 상태', unit: '%', values: gen(70, 60) },
       { key: 'outflow', label: '송수펌프 유출 유량', unit: 'm³/h', values: gen(40, 30) },
       { key: 'pressure', label: '정속 펌프 토출 관압', unit: 'kg/cm²', values: gen(7, 1.5) },
-      { key: 'pumpCount', label: '정속 펌프 가동 대수', unit: '대', values: gen(3, 2, 12).map((v) => Math.max(0, Math.round(v))) },
+      {
+        key: 'pumpCount',
+        label: '정속 펌프 가동 대수',
+        unit: '대',
+        values: gen(3, 2, 12).map((v) => Math.max(0, Math.round(v))),
+      },
     ],
     instant: [
       { name: '배수지 수위', value: 56, unit: 'm' },
@@ -580,12 +670,11 @@ const SUJI2_RESERVOIRS = [
 ]
 
 export function buildSujiSelect2(reservoir?: string): SujiSelect2Data {
-  const selected = reservoir && SUJI2_RESERVOIRS.includes(reservoir) ? reservoir : SUJI2_RESERVOIRS[0]
+  const selected =
+    reservoir && SUJI2_RESERVOIRS.includes(reservoir) ? reservoir : SUJI2_RESERVOIRS[0]
   const intervalMs = 3_600_000
   const startMs = Date.now() - 23 * intervalMs
-  const levels = Array.from({ length: 24 }, () =>
-    Number((3.0 + Math.random() * 1.5).toFixed(2)),
-  )
+  const levels = Array.from({ length: 24 }, () => Number((3.0 + Math.random() * 1.5).toFixed(2)))
 
   return {
     reservoirs: SUJI2_RESERVOIRS,
@@ -605,7 +694,7 @@ export function buildSujiSelect2(reservoir?: string): SujiSelect2Data {
       { name: '마도', levelM: 2.74, unit: 'm' },
       { name: '광평', levelM: 3.12, unit: 'm' },
       { name: '비봉', levelM: 2.95, unit: 'm' },
-      { name: '동화', levelM: 3.40, unit: 'm' },
+      { name: '동화', levelM: 3.4, unit: 'm' },
       { name: '문호', levelM: 2.18, unit: 'm' },
     ],
   }
@@ -643,6 +732,17 @@ function granIntervalMs(granularity: PumpPerformGranularity): number {
         : 365 * 86_400_000
 }
 
+const ZONE_FACILITIES: Record<string, string[]> = {
+  관리동: ['MCC-A', 'HP PNL', 'HWG-101', 'HT-102'],
+  활성탄흡착지동: ['활성탄 #1', '활성탄 #2', '활성탄 #3'],
+  약품투입동: ['약품펌프 #1', '약품펌프 #2', '저장조'],
+  오존설비동: ['오존발생기 #1', '오존발생기 #2', '오존주입펌프'],
+  금속여과지동: ['여과지 #1', '여과지 #2', '역세펌프'],
+  송수펌프동: ['H1.PM1', 'H1.PM2', 'H1.PM3', 'H1.PM4'],
+  염소투입동: ['염소투입펌프 #1', '염소투입펌프 #2'],
+  탈수기동내부: ['탈수기 #1', '탈수기 #2', '컨베이어'],
+}
+
 export function buildZoneUsage(granularity: PumpPerformGranularity): ZoneUsageData {
   const intervalMs = granIntervalMs(granularity)
   const startMs = Date.now() - 11 * intervalMs
@@ -656,13 +756,49 @@ export function buildZoneUsage(granularity: PumpPerformGranularity): ZoneUsageDa
       peakHourDate: `2026-05-${String(10 + Math.floor(Math.random() * 11)).padStart(2, '0')} ${String(8 + Math.floor(Math.random() * 12)).padStart(2, '0')}:00`,
     }
   })
+  const DAYS = ['월', '화', '수', '목', '금', '토', '일']
+  const HOUR_SLOTS = ['00-06', '06-12', '12-18', '18-24']
+  const buildHourSlots = (dailyValue: number) =>
+    HOUR_SLOTS.map((slot, i) => ({
+      name: slot,
+      value: Math.round((dailyValue / HOUR_SLOTS.length) * (0.55 + ((i * 5) % 7) * 0.14)),
+    }))
+  const buildGrandchildren = (parentValue: number) =>
+    DAYS.map((d, i) => {
+      const dailyValue = Math.round((parentValue / DAYS.length) * (0.5 + ((i * 7) % 9) * 0.12))
+      return {
+        name: d,
+        value: dailyValue,
+        children: buildHourSlots(dailyValue),
+      }
+    })
+  const buildChildren = (zoneName: string, parentValue: number) => {
+    const facs = ZONE_FACILITIES[zoneName] ?? []
+    if (facs.length === 0) return undefined
+    return facs.map((f, i) => {
+      const facValue = Math.round((parentValue / facs.length) * (0.6 + (i % 3) * 0.25))
+      return {
+        name: f,
+        value: facValue,
+        children: buildGrandchildren(facValue),
+      }
+    })
+  }
   return {
     startMs,
     intervalMs,
     totalKwh: zones.reduce((s, z) => s + z.totalKwh, 0),
     zones,
-    sumChart: zones.map((z) => ({ name: z.name, value: z.totalKwh })),
-    distributionChart: zones.map((z) => ({ name: z.name, value: z.hourlyPeakKw })),
+    sumChart: zones.map((z) => ({
+      name: z.name,
+      value: z.totalKwh,
+      children: buildChildren(z.name, z.totalKwh),
+    })),
+    distributionChart: zones.map((z) => ({
+      name: z.name,
+      value: z.hourlyPeakKw,
+      children: buildChildren(z.name, z.hourlyPeakKw),
+    })),
     trendChart: zones.map((z, i) => ({
       name: z.name,
       color: USAGE_PALETTE[i % USAGE_PALETTE.length],
@@ -682,10 +818,7 @@ const FAC_CATEGORIES = [
   { name: '탈수기동내부', facilities: ['탈수기 #1', '탈수기 #2', '컨베이어'] },
 ]
 
-export function buildFacUsage(
-  granularity: PumpPerformGranularity,
-  facility = 0,
-): FacUsageData {
+export function buildFacUsage(granularity: PumpPerformGranularity, facility = 0): FacUsageData {
   const intervalMs = granIntervalMs(granularity)
   const startMs = Date.now() - 11 * intervalMs
   const selectedIndex = Math.max(0, Math.min(FAC_CATEGORIES.length - 1, facility))

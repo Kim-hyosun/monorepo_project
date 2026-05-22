@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 
 import { AioPanel } from '@/shared/components/AioPanel'
 import { TopNavigator } from '@/shared/components/TopNavigator'
+import { CoagulantsLeftContents } from '@/features/coagulants/components/CoagulantsLeftContents'
+import { CoagulantsRightContents } from '@/features/coagulants/components/CoagulantsRightContents'
+import { ProcessHero } from '@/shared/components/ProcessHero'
 import { ProcessPageHeader } from '@/shared/components/ProcessPageHeader'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { Input } from '@/shared/ui/input'
@@ -16,10 +19,10 @@ import {
 import { dialog } from '@/libs/dialog'
 import type { OperationMode } from '@/shared/components/ModeToggleBar'
 
-const TrendLineChart = dynamic(
-  () => import('@/features/coagulants/components/TrendLineChart'),
-  { ssr: false, loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div> },
-)
+const TrendLineChart = dynamic(() => import('@/features/coagulants/components/TrendLineChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
 
 interface Props {
   step: 3 | 4
@@ -70,6 +73,7 @@ export function CoagulantsPage({ step }: Props) {
   return (
     <div className='-m-6 min-h-screen space-y-4 p-6 text-white' style={DARK_WRAPPER_STYLE}>
       <TopNavigator variant='dark' />
+      <ProcessHero cubeKey='coagulants' title='응집 공정' subtitle='응집제 주입율 / cgSimulation' />
       <ProcessPageHeader
         variant='dark'
         title={`응집 — 알고리즘 (${step}단계)`}
@@ -81,6 +85,9 @@ export function CoagulantsPage({ step }: Props) {
         onSave={onSave}
         saveDisabled={isPending}
       />
+
+      <CoagulantsLeftContents data={data} />
+      <CoagulantsRightContents data={data} />
 
       <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
         {isModifyMode ? (
@@ -96,14 +103,25 @@ export function CoagulantsPage({ step }: Props) {
           <KpiCard variant='dark' label='응집제 주입율' value={dose} unit='mg/L' />
         )}
         <KpiCard variant='dark' highlight label='AI 응집제 주입율' value={aiDose} unit='mg/L' />
-        <KpiCard variant='dark' highlight label='AI 추천값' value={data.recommend_cg_dose} unit='mg/L' />
+        <KpiCard
+          variant='dark'
+          highlight
+          label='AI 추천값'
+          value={data.recommend_cg_dose}
+          unit='mg/L'
+        />
         <KpiCard variant='dark' label='응집제 농도' value={data.cg_density} unit='%' />
         <KpiCard variant='dark' label='유입 탁도' value={data.in_tb} unit='NTU' />
       </div>
 
       {data.ai_cg_dose_trend ? (
         <AioPanel className='p-4'>
-          <TrendLineChart dark data={data.ai_cg_dose_trend} title='AI 응집제 주입율 트렌드' yLabel='mg/L' />
+          <TrendLineChart
+            dark
+            data={data.ai_cg_dose_trend}
+            title='AI 응집제 주입율 트렌드'
+            yLabel='mg/L'
+          />
         </AioPanel>
       ) : null}
     </div>

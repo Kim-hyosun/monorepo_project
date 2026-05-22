@@ -1,10 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { filterApi } from '@/features/filter/api/filterApi'
-import type {
-  PutBackwashPayload,
-  PutOperationPayload,
-} from '@/features/filter/types/filter'
+import type { PutBackwashPayload, PutOperationPayload } from '@/features/filter/types/filter'
 
 export const filterKeys = {
   all: ['filter'] as const,
@@ -15,7 +12,7 @@ export function useFilterLatestQuery() {
   return useQuery({
     queryKey: filterKeys.latest(),
     queryFn: async () => (await filterApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

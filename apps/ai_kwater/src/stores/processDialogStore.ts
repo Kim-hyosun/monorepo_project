@@ -3,6 +3,8 @@
 
 import { create } from 'zustand'
 
+import type { PmsAlert } from '@/features/pms/types/pms'
+
 interface AiModeDialog {
   visible: boolean
   expectedValue: number | null
@@ -19,11 +21,20 @@ interface SimpleVisibleDialog {
   visible: boolean
 }
 
+interface AlarmNotifyDialog {
+  visible: boolean
+  alert: PmsAlert | null
+  /** 새 알람 발생 시 자동 노출 여부 (dev 환경 기본 활성) */
+  autoShow: boolean
+  /** 자동 노출이 1회라도 표시한 알람 num set — 중복 방지 */
+  shownNums: number[]
+}
+
 interface ProcessDialogState {
   aiMode: AiModeDialog
   aiModeOfJi: AiModeOfJiDialog
   aiFilterNGACSchedule: SimpleVisibleDialog
-  alarmNotify: SimpleVisibleDialog
+  alarmNotify: AlarmNotifyDialog
 
   openAiMode: (expectedValue: number, ctx?: { disinfectionIndex?: number; stage?: number }) => void
   closeAiMode: () => void
@@ -31,15 +42,18 @@ interface ProcessDialogState {
   closeAiModeOfJi: () => void
   openAiFilterNGACSchedule: () => void
   closeAiFilterNGACSchedule: () => void
-  openAlarmNotify: () => void
+  openAlarmNotify: (alert: PmsAlert) => void
   closeAlarmNotify: () => void
+  setAlarmAutoShow: (autoShow: boolean) => void
+  /** 새 알람 큐가 들어왔을 때 — autoShow 켜져있고 read=false 이고 미표시면 자동 open */
+  autoShowAlarmIfNew: (alerts: PmsAlert[]) => void
 }
 
 export const useProcessDialogStore = create<ProcessDialogState>((set) => ({
   aiMode: { visible: false, expectedValue: null, disinfectionIndex: null, stage: null },
   aiModeOfJi: { visible: false, number: null },
   aiFilterNGACSchedule: { visible: false },
-  alarmNotify: { visible: true }, // 원본 default true
+  alarmNotify: { visible: false, alert: null, autoShow: true, shownNums: [] },
 
   openAiMode: (expectedValue, ctx) =>
     set({
@@ -59,6 +73,33 @@ export const useProcessDialogStore = create<ProcessDialogState>((set) => ({
   openAiFilterNGACSchedule: () => set({ aiFilterNGACSchedule: { visible: true } }),
   closeAiFilterNGACSchedule: () => set({ aiFilterNGACSchedule: { visible: false } }),
 
-  openAlarmNotify: () => set({ alarmNotify: { visible: true } }),
-  closeAlarmNotify: () => set({ alarmNotify: { visible: false } }),
+  openAlarmNotify: (alert) =>
+    set((s) => ({
+      alarmNotify: {
+        ...s.alarmNotify,
+        visible: true,
+        alert,
+        shownNums: s.alarmNotify.shownNums.includes(alert.num)
+          ? s.alarmNotify.shownNums
+          : [...s.alarmNotify.shownNums, alert.num],
+      },
+    })),
+  closeAlarmNotify: () =>
+    set((s) => ({ alarmNotify: { ...s.alarmNotify, visible: false, alert: null } })),
+  setAlarmAutoShow: (autoShow) => set((s) => ({ alarmNotify: { ...s.alarmNotify, autoShow } })),
+  autoShowAlarmIfNew: (alerts) =>
+    set((s) => {
+      if (!s.alarmNotify.autoShow) return {}
+      if (s.alarmNotify.visible) return {} // 이미 표시 중
+      const next = alerts.find((a) => a.read !== true && !s.alarmNotify.shownNums.includes(a.num))
+      if (!next) return {}
+      return {
+        alarmNotify: {
+          ...s.alarmNotify,
+          visible: true,
+          alert: next,
+          shownNums: [...s.alarmNotify.shownNums, next.num],
+        },
+      }
+    }),
 }))

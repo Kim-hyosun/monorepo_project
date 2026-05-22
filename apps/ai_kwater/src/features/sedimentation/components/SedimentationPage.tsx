@@ -5,7 +5,10 @@ import { useEffect, useState } from 'react'
 
 import { AioPanel } from '@/shared/components/AioPanel'
 import { TopNavigator } from '@/shared/components/TopNavigator'
+import { ProcessHero } from '@/shared/components/ProcessHero'
 import { ProcessPageHeader } from '@/shared/components/ProcessPageHeader'
+import { SedimentationLeftContents } from '@/features/sedimentation/components/SedimentationLeftContents'
+import { SedimentationRightContents } from '@/features/sedimentation/components/SedimentationRightContents'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { Input } from '@/shared/ui/input'
 import {
@@ -16,10 +19,21 @@ import {
 import { dialog } from '@/libs/dialog'
 import type { OperationMode } from '@/shared/components/ModeToggleBar'
 
-const TrendLineChart = dynamic(
-  () => import('@/features/receiving/components/TrendLineChart'),
-  { ssr: false, loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div> },
+const TrendLineChart = dynamic(() => import('@/features/receiving/components/TrendLineChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
+const SedimentationHighchart = dynamic(
+  () => import('@/shared/components/charts/SedimentationHighchart'),
+  {
+    ssr: false,
+    loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+  },
 )
+const ESCScheduleChart = dynamic(() => import('@/shared/components/charts/ESCScheduleChart'), {
+  ssr: false,
+  loading: () => <div className='text-[var(--aio-subtitle)] text-sm'>차트 로딩 중…</div>,
+})
 
 interface Props {
   step: 3 | 4
@@ -72,10 +86,15 @@ export function SedimentationPage({ step }: Props) {
   return (
     <div className='-m-6 min-h-screen space-y-4 p-6 text-white' style={DARK_WRAPPER_STYLE}>
       <TopNavigator variant='dark' />
+      <ProcessHero cubeKey='sedimentation' title='침전 공정' subtitle='침전시간 / 출구 탁도' />
       <ProcessPageHeader
         variant='dark'
         title={`침전 — 알고리즘 (${step}단계)`}
-        step={{ current: step, threePath: '/sedimentationAlgorithm', fourPath: '/sedimentationAlgorithmS' }}
+        step={{
+          current: step,
+          threePath: '/sedimentationAlgorithm',
+          fourPath: '/sedimentationAlgorithmS',
+        }}
         mode={data.operation_mode}
         onModeChange={onModeChange}
         isModifyMode={isModifyMode}
@@ -84,34 +103,93 @@ export function SedimentationPage({ step }: Props) {
         saveDisabled={isPending}
       />
 
+      <SedimentationLeftContents data={data} />
+      <SedimentationRightContents data={data} />
+
       <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
         {isModifyMode ? (
           <>
             <DarkModifyField label='침전 시간 (분)' value={draftTime} onChange={setDraftTime} />
-            <DarkModifyField label='슬러지 배출 주기 (분)' value={draftPurge} onChange={setDraftPurge} />
+            <DarkModifyField
+              label='슬러지 배출 주기 (분)'
+              value={draftPurge}
+              onChange={setDraftPurge}
+            />
           </>
         ) : (
           <>
             <KpiCard variant='dark' label='침전 시간' value={data.sd_time} unit='분' />
-            <KpiCard variant='dark' label='슬러지 배출 주기' value={data.sd_purge_interval} unit='분' />
+            <KpiCard
+              variant='dark'
+              label='슬러지 배출 주기'
+              value={data.sd_purge_interval}
+              unit='분'
+            />
           </>
         )}
         <KpiCard variant='dark' label='침전지 출구 탁도' value={turbidity} unit='NTU' />
-        <KpiCard variant='dark' highlight label='AI 출구 탁도 예측' value={aiTurbidity} unit='NTU' />
+        <KpiCard
+          variant='dark'
+          highlight
+          label='AI 출구 탁도 예측'
+          value={aiTurbidity}
+          unit='NTU'
+        />
         <KpiCard variant='dark' label='슬러지 농도' value={data.sd_density} unit='%' />
-        <KpiCard variant='dark' highlight label='AI 슬러지 배출 추천' value={data.ai_sd_purge_interval} unit='분' />
+        <KpiCard
+          variant='dark'
+          highlight
+          label='AI 슬러지 배출 추천'
+          value={data.ai_sd_purge_interval}
+          unit='분'
+        />
       </div>
 
       {data.ai_e_out_tb_trend ? (
         <AioPanel className='p-4'>
-          <TrendLineChart dark data={data.ai_e_out_tb_trend} title='침전지 출구 탁도 트렌드' yLabel='NTU' />
+          <TrendLineChart
+            dark
+            data={data.ai_e_out_tb_trend}
+            title='침전지 출구 탁도 트렌드'
+            yLabel='NTU'
+          />
         </AioPanel>
+      ) : null}
+
+      {data.ai_e_out_tb_trend ? (
+        <AioPanel className='p-4'>
+          <SedimentationHighchart
+            turbidityTrend={data.ai_e_out_tb_trend}
+            aiPredictTrend={data.ai_e_out_tb_predict}
+            sludgeDensityTrend={data.sd_density_trend}
+          />
+        </AioPanel>
+      ) : null}
+
+      {data.purge_schedule && data.purge_schedule.length > 0 ? (
+        <ESCScheduleChart
+          entries={data.purge_schedule.map((p) => ({
+            index: p.line,
+            label: p.label,
+            start: p.start,
+            end: p.end,
+            state: p.state,
+          }))}
+        />
       ) : null}
     </div>
   )
 }
 
-function DarkModifyField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function DarkModifyField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: string
+  onChange: (v: string) => void
+}) {
   return (
     <div className='rounded-lg border border-[var(--aio-accent)]/50 bg-[var(--aio-panel)] p-4'>
       <div className='text-xs text-[var(--aio-subtitle)]'>{label}</div>

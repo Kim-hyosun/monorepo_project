@@ -16,7 +16,7 @@ export function useCoagulantsLatestQuery() {
   return useQuery({
     queryKey: coagulantsKeys.latest(),
     queryFn: async () => (await coagulantsApi.getLatest()).latest,
-    refetchInterval: 60_000,
+    refetchInterval: 120_000,
   })
 }
 

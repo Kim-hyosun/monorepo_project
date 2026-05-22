@@ -1,6 +1,9 @@
 'use client'
 
-import ReactECharts from 'echarts-for-react'
+import type Highcharts from 'highcharts'
+
+import BaseHighchart from '@/features/ems/components/highcharts/BaseHighchart'
+import { baseDarkOptions, mergeDark } from '@/features/ems/components/highcharts/highchartsBase'
 
 interface Props {
   data: Array<[number, number]>
@@ -9,75 +12,60 @@ interface Props {
   dark?: boolean
 }
 
-export default function TrendLineChart({ data, title, yLabel, dark }: Props) {
-  if (dark) {
-    const option = {
-      backgroundColor: 'transparent',
-      title: { text: title, textStyle: { fontSize: 13, color: '#c3eaff' } },
-      tooltip: {
-        trigger: 'axis' as const,
-        backgroundColor: 'rgba(0,6,77,0.85)',
-        borderColor: '#5cafff',
-        textStyle: { color: '#fff' },
-      },
-      grid: { left: 60, right: 30, top: 40, bottom: 30 },
-      xAxis: {
-        type: 'time' as const,
-        axisLine: { lineStyle: { color: '#5cafff88' } },
-        axisLabel: { color: '#c3eaff' },
-        splitLine: { lineStyle: { color: 'rgba(139, 194, 240, 0.1)' } },
-      },
-      yAxis: {
-        type: 'value' as const,
-        name: yLabel,
-        nameTextStyle: { color: '#c3eaff' },
-        axisLine: { lineStyle: { color: '#5cafff88' } },
-        axisLabel: { color: '#c3eaff' },
-        splitLine: { lineStyle: { color: 'rgba(139, 194, 240, 0.1)' } },
-      },
-      series: [
-        {
-          type: 'line' as const,
-          smooth: true,
-          showSymbol: false,
-          data,
-          itemStyle: { color: '#5cafff' },
-          lineStyle: { width: 2, shadowColor: '#5cafff', shadowBlur: 10 },
-          areaStyle: {
-            color: {
-              type: 'linear' as const,
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [
-                { offset: 0, color: 'rgba(92, 175, 255, 0.4)' },
-                { offset: 1, color: 'rgba(92, 175, 255, 0)' },
-              ],
-            },
-          },
-        },
-      ],
-    }
-    return <ReactECharts option={option} style={{ height: 280, width: '100%' }} />
-  }
+const DARK_GRADIENT: Highcharts.GradientColorObject = {
+  linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+  stops: [
+    [0, 'rgba(92,175,255,0.4)'],
+    [1, 'rgba(92,175,255,0)'],
+  ],
+}
 
-  const option = {
-    title: { text: title, textStyle: { fontSize: 13 } },
-    tooltip: { trigger: 'axis' as const },
-    grid: { left: 60, right: 30, top: 40, bottom: 30 },
-    xAxis: { type: 'time' as const },
-    yAxis: { type: 'value' as const, name: yLabel },
+const LIGHT_GRADIENT: Highcharts.GradientColorObject = {
+  linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+  stops: [
+    [0, 'rgba(59,130,246,0.24)'],
+    [1, 'rgba(59,130,246,0)'],
+  ],
+}
+
+const LIGHT_OPTIONS: Highcharts.Options = {
+  chart: { backgroundColor: 'transparent', style: { fontFamily: 'inherit' } },
+  credits: { enabled: false },
+  accessibility: { enabled: false },
+  exporting: { enabled: false },
+  legend: { enabled: false },
+  tooltip: { shared: true },
+  plotOptions: { series: { animation: { duration: 200 }, marker: { enabled: false } } },
+}
+
+export default function TrendLineChart({ data, title, yLabel, dark }: Props) {
+  const seriesColor = dark ? '#5cafff' : '#3b82f6'
+  const fill = dark ? DARK_GRADIENT : LIGHT_GRADIENT
+
+  const baseOptions: Highcharts.Options = {
+    chart: { height: 280, marginTop: 50 },
+    title: {
+      text: title,
+      style: dark ? { color: '#c3eaff', fontSize: '13px' } : { fontSize: '13px' },
+      align: 'left',
+    },
+    xAxis: { type: 'datetime', labels: { format: '{value:%m-%d %H:%M}' } },
+    yAxis: { title: { text: yLabel } },
     series: [
       {
-        type: 'line' as const,
-        smooth: true,
-        showSymbol: false,
+        type: 'area',
+        name: title,
         data,
-        itemStyle: { color: '#3b82f6' },
-        areaStyle: { color: 'rgba(59, 130, 246, 0.12)' },
+        color: seriesColor,
+        lineWidth: 2,
+        fillColor: fill,
       },
     ],
   }
-  return <ReactECharts option={option} style={{ height: 280, width: '100%' }} />
+
+  const options = dark
+    ? mergeDark(baseDarkOptions(), baseOptions)
+    : { ...LIGHT_OPTIONS, ...baseOptions }
+
+  return <BaseHighchart options={options} height={280} />
 }
