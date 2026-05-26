@@ -30,11 +30,17 @@ interface AlarmNotifyDialog {
   shownNums: number[]
 }
 
+interface ProcessDetailDialog {
+  visible: boolean
+  processKey: string | null
+}
+
 interface ProcessDialogState {
   aiMode: AiModeDialog
   aiModeOfJi: AiModeOfJiDialog
   aiFilterNGACSchedule: SimpleVisibleDialog
   alarmNotify: AlarmNotifyDialog
+  processDetail: ProcessDetailDialog
 
   openAiMode: (expectedValue: number, ctx?: { disinfectionIndex?: number; stage?: number }) => void
   closeAiMode: () => void
@@ -47,6 +53,8 @@ interface ProcessDialogState {
   setAlarmAutoShow: (autoShow: boolean) => void
   /** 새 알람 큐가 들어왔을 때 — autoShow 켜져있고 read=false 이고 미표시면 자동 open */
   autoShowAlarmIfNew: (alerts: PmsAlert[]) => void
+  openProcessDetail: (processKey: string) => void
+  closeProcessDetail: () => void
 }
 
 export const useProcessDialogStore = create<ProcessDialogState>((set) => ({
@@ -54,6 +62,7 @@ export const useProcessDialogStore = create<ProcessDialogState>((set) => ({
   aiModeOfJi: { visible: false, number: null },
   aiFilterNGACSchedule: { visible: false },
   alarmNotify: { visible: false, alert: null, autoShow: true, shownNums: [] },
+  processDetail: { visible: false, processKey: null },
 
   openAiMode: (expectedValue, ctx) =>
     set({
@@ -102,4 +111,7 @@ export const useProcessDialogStore = create<ProcessDialogState>((set) => ({
         },
       }
     }),
+
+  openProcessDetail: (processKey) => set({ processDetail: { visible: true, processKey } }),
+  closeProcessDetail: () => set({ processDetail: { visible: false, processKey: null } }),
 }))

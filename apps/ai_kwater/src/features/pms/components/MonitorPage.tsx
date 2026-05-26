@@ -9,6 +9,10 @@ import { AioPanel } from '@/shared/components/AioPanel'
 import { KpiCard } from '@/shared/components/KpiCard'
 import { AlertSidebar } from '@/features/pms/components/AlertSidebar'
 import { MotorList } from '@/features/pms/components/MotorList'
+import {
+  MotorThermometer,
+  MotorVibrationOverlay,
+} from '@/features/pms/components/MotorVisualization'
 import { PmsPageWrapper } from '@/features/pms/components/PmsPageWrapper'
 import {
   usePmsAlertsQuery,
@@ -122,7 +126,10 @@ export function MonitorPage({ index, title }: Props) {
                   }
                 `}</style>
                 <div className='flex items-center gap-4'>
-                  <div className='relative h-32 w-40 shrink-0' style={{ perspective: '420px' }}>
+                  <div
+                    className='relative h-32 w-40 shrink-0 overflow-hidden'
+                    style={{ perspective: '420px' }}
+                  >
                     <Image
                       src='/pms/motor_back.png'
                       alt=''
@@ -145,8 +152,10 @@ export function MonitorPage({ index, title }: Props) {
                         className='object-contain drop-shadow-[0_0_18px_rgba(92,175,255,0.6)]'
                       />
                     </div>
+                    {/* vibration wave overlay (진폭/속도 motor.vibration_val 기반) */}
+                    <MotorVibrationOverlay value={motor.vibration_val} />
                   </div>
-                  <div className='space-y-1'>
+                  <div className='flex-1 space-y-1'>
                     <div className='text-base font-semibold text-white'>{motor.name}</div>
                     <div className='text-xs text-[var(--aio-subtitle)]'>{motor.category}</div>
                     <div className='flex items-center gap-2 text-xs'>
@@ -166,6 +175,8 @@ export function MonitorPage({ index, title }: Props) {
                       ) : null}
                     </div>
                   </div>
+                  {/* Thermometer indicator */}
+                  <MotorThermometer value={motor.temperature_val} />
                 </div>
               </AioPanel>
 

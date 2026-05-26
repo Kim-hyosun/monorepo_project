@@ -7,6 +7,12 @@ import dynamic from 'next/dynamic'
 import { AioPageHeader } from '@/shared/components/AioPageHeader'
 import { AioPanel } from '@/shared/components/AioPanel'
 import { KpiCard } from '@/shared/components/KpiCard'
+import { BrainOrnament } from '@/features/dashboard/components/BrainOrnament'
+import {
+  ProcessDetailDialog,
+  type ProcessDetailPayload,
+} from '@/features/dashboard/components/ProcessDetailDialog'
+import { useProcessDialogStore } from '@/stores/processDialogStore'
 import { useRawLatestQuery } from '@/features/raw/queries/rawQueries'
 import { useReceivingLatestQuery } from '@/features/receiving/queries/receivingQueries'
 import { useCoagulantsLatestQuery } from '@/features/coagulants/queries/coagulantsQueries'
@@ -56,6 +62,7 @@ export function Dashboard() {
   const { data: gac } = useGacLatestQuery()
   const { data: ozone } = useOzoneLatestQuery()
   const { data: disinfection } = useDisinfectionLatestQuery()
+  const openProcessDetail = useProcessDialogStore((s) => s.openProcessDetail)
 
   const processes: ProcessNode[] = [
     {
@@ -180,7 +187,7 @@ export function Dashboard() {
           />
         </div>
 
-        {/* Brain (center) — frame + halo + ai_brain + AI 라벨 */}
+        {/* Brain (center) — frame + halo + particle ornament + ai_brain + AI 라벨 */}
         <AioPanel className='flex items-center justify-center p-4'>
           <div className='relative aspect-square w-full max-w-md'>
             {/* Outer frame */}
@@ -200,6 +207,8 @@ export function Dashboard() {
               sizes='(min-width: 1024px) 480px, 100vw'
               className='animate-pulse object-contain opacity-80 [animation-duration:3s]'
             />
+            {/* Particle ring + dual aura (overlay, pointer-events-none) */}
+            <BrainOrnament />
             {/* Brain icon */}
             <div className='absolute inset-[18%]'>
               <Image
@@ -283,10 +292,11 @@ export function Dashboard() {
           </div>
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8'>
             {processes.map((p) => (
-              <Link
+              <button
                 key={p.key}
-                href={p.href}
-                className='group relative flex flex-col items-center gap-2 rounded-md border border-transparent p-3 transition hover:border-[var(--aio-panel-border)] hover:bg-white/5'
+                type='button'
+                onClick={() => openProcessDetail(p.key)}
+                className='group relative flex flex-col items-center gap-2 rounded-md border border-transparent p-3 text-left transition hover:border-[var(--aio-panel-border)] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aio-accent)]/60'
               >
                 <div className='relative h-20 w-20'>
                   <Image
@@ -298,7 +308,7 @@ export function Dashboard() {
                   />
                 </div>
                 <div
-                  className='text-sm font-medium text-white'
+                  className='w-full text-center text-sm font-medium text-white'
                   style={{ textShadow: 'var(--aio-text-glow)' }}
                 >
                   {p.title}
@@ -306,7 +316,7 @@ export function Dashboard() {
                 <div className='rounded bg-[var(--aio-accent)]/20 px-1.5 py-0.5 text-[10px] font-medium text-[var(--aio-accent)]'>
                   {modeLabel(p.mode)}
                 </div>
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -360,6 +370,200 @@ export function Dashboard() {
           />
         </AioPanel>
       ) : null}
+
+      <ProcessDetailDialog
+        payloadByKey={buildProcessDetailPayloads({
+          processes,
+          receiving,
+          coagulants,
+          mixing,
+          sedimentation,
+          filter,
+          gac,
+          ozone,
+          disinfection,
+        })}
+      />
     </div>
   )
+}
+
+interface PayloadBuildArgs {
+  processes: ProcessNode[]
+  receiving: ReturnType<typeof useReceivingLatestQuery>['data']
+  coagulants: ReturnType<typeof useCoagulantsLatestQuery>['data']
+  mixing: ReturnType<typeof useMixingLatestQuery>['data']
+  sedimentation: ReturnType<typeof useSedimentationLatestQuery>['data']
+  filter: ReturnType<typeof useFilterLatestQuery>['data']
+  gac: ReturnType<typeof useGacLatestQuery>['data']
+  ozone: ReturnType<typeof useOzoneLatestQuery>['data']
+  disinfection: ReturnType<typeof useDisinfectionLatestQuery>['data']
+}
+
+function fmt(n: unknown, digits = 2): string {
+  if (typeof n !== 'number' || !Number.isFinite(n)) return '-'
+  return n.toFixed(digits)
+}
+
+function buildProcessDetailPayloads(args: PayloadBuildArgs): Record<string, ProcessDetailPayload> {
+  const {
+    processes,
+    receiving,
+    coagulants,
+    mixing,
+    sedimentation,
+    filter,
+    gac,
+    ozone,
+    disinfection,
+  } = args
+  const byKey: Record<string, ProcessNode> = Object.fromEntries(processes.map((p) => [p.key, p]))
+  const trend = receiving?.ai_b_in_fr_trend ?? []
+
+  return {
+    receiving: {
+      title: byKey.receiving.title,
+      subtitle: '착수정 유입 / 압력 / 1·2차 밸브',
+      icon: byKey.receiving.icon,
+      href: byKey.receiving.href,
+      mode: receiving?.operation_mode,
+      kpis: [
+        { label: '원수 유입', value: fmt(receiving?.b_in_fr_i, 0), unit: 'm³/h', highlight: true },
+        { label: '순시 유량', value: fmt(receiving?.b_in_fr_q, 0), unit: 'm³/h' },
+        { label: '유입 압력', value: fmt(receiving?.b_in_pr, 2), unit: 'kgf/cm²' },
+        { label: 'AI 예측', value: fmt(receiving?.ai_b1_in_fr, 0), unit: 'm³/h' },
+      ],
+      trend,
+      trendUnit: 'm³/h',
+    },
+    coagulants: {
+      title: byKey.coagulants.title,
+      subtitle: '응집제 주입 / 펌프 상태',
+      icon: byKey.coagulants.icon,
+      href: byKey.coagulants.href,
+      mode: coagulants?.operation_mode,
+      kpis: [
+        { label: '주입율', value: fmt(coagulants?.cg_dose, 2), unit: 'mg/L', highlight: true },
+        { label: '잔류율', value: fmt(coagulants?.cg_residual, 2), unit: 'mg/L' },
+        {
+          label: '가동 펌프',
+          value: (coagulants?.cg_pump_states ?? []).filter(Boolean).length,
+          unit: '대',
+        },
+      ],
+      trend,
+      trendUnit: 'mg/L',
+    },
+    mixing: {
+      title: byKey.mixing.title,
+      subtitle: '혼화 G값 / 믹서 RPM',
+      icon: byKey.mixing.icon,
+      href: byKey.mixing.href,
+      mode: mixing?.operation_mode,
+      kpis: [
+        { label: 'G값', value: fmt(mixing?.g_value, 1), unit: 's⁻¹', highlight: true },
+        { label: 'GT값', value: fmt(mixing?.gt_value, 0), unit: '' },
+        { label: '믹서 1 RPM', value: fmt(mixing?.mixer_rpms?.[0], 0), unit: 'rpm' },
+        { label: '믹서 2 RPM', value: fmt(mixing?.mixer_rpms?.[1], 0), unit: 'rpm' },
+      ],
+    },
+    sedimentation: {
+      title: byKey.sedimentation.title,
+      subtitle: '침전 출구 탁도 / 슬러지 밸브',
+      icon: byKey.sedimentation.icon,
+      href: byKey.sedimentation.href,
+      mode: sedimentation?.operation_mode,
+      kpis: [
+        {
+          label: '출구 탁도',
+          value: fmt(sedimentation?.e_out_tb, 3),
+          unit: 'NTU',
+          highlight: true,
+        },
+        {
+          label: 'AI 예측',
+          value: fmt(sedimentation?.ai_e_out_tb_predict?.[0]?.[1], 3),
+          unit: 'NTU',
+        },
+        {
+          label: '슬러지 밸브',
+          value: (sedimentation?.sludge_valves ?? []).filter((v) => v > 0).length,
+          unit: '개 열림',
+        },
+      ],
+    },
+    filter: {
+      title: byKey.filter.title,
+      subtitle: '여과 손실수두 / 여과지 가동',
+      icon: byKey.filter.icon,
+      href: byKey.filter.href,
+      mode: filter?.operation_mode,
+      kpis: [
+        { label: '손실 수두', value: fmt(filter?.f_loss_head, 2), unit: 'm', highlight: true },
+        {
+          label: '가동 여과지',
+          value: (filter?.f_states ?? []).filter(Boolean).length,
+          unit: '개',
+        },
+      ],
+    },
+    gac: {
+      title: byKey.gac.title,
+      subtitle: 'GAC 손실수두 / 출구 탁도',
+      icon: byKey.gac.icon,
+      href: byKey.gac.href,
+      mode: gac?.operation_mode,
+      kpis: [
+        { label: '출구 탁도', value: fmt(gac?.g_out_tb, 3), unit: 'NTU', highlight: true },
+        { label: '손실 수두', value: fmt(gac?.g_loss_head, 2), unit: 'm' },
+        { label: '가동 GAC', value: (gac?.gac_states ?? []).filter(Boolean).length, unit: '개' },
+      ],
+    },
+    ozone: {
+      title: byKey.ozone.title,
+      subtitle: '오존 주입 / 생성기 부하',
+      icon: byKey.ozone.icon,
+      href: byKey.ozone.href,
+      mode: ozone?.operation_mode,
+      kpis: [
+        { label: '주입율', value: fmt(ozone?.oz_dose, 2), unit: 'mg/L', highlight: true },
+        { label: '생성기 부하', value: fmt(ozone?.oz_generator_load, 1), unit: '%' },
+        {
+          label: '가동 생성기',
+          value: (ozone?.oz_generator_states ?? []).filter(Boolean).length,
+          unit: '대',
+        },
+      ],
+    },
+    disinfection: {
+      title: byKey.disinfection.title,
+      subtitle: '전·중·후염소 잔류 / 주입율',
+      icon: byKey.disinfection.icon,
+      href: byKey.disinfection.href,
+      mode: disinfection?.operation_mode,
+      kpis: [
+        {
+          label: '후염소 주입',
+          value: fmt(disinfection?.stages.after.cl_dose, 2),
+          unit: 'mg/L',
+          highlight: true,
+        },
+        {
+          label: '후염소 잔류',
+          value: fmt(disinfection?.stages.after.cl_residual, 2),
+          unit: 'mg/L',
+        },
+        {
+          label: '전염소 잔류',
+          value: fmt(disinfection?.stages.pre?.cl_residual, 2),
+          unit: 'mg/L',
+        },
+        {
+          label: '중염소 잔류',
+          value: fmt(disinfection?.stages.mid?.cl_residual, 2),
+          unit: 'mg/L',
+        },
+      ],
+    },
+  }
 }
