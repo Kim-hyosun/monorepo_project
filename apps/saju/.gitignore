@@ -1,0 +1,18 @@
+# next
+.next
+out
+
+# env
+.env*.local
+.env.local
+
+# build
+node_modules
+*.tsbuildinfo
+
+# logs
+*.log
+
+# IDE
+.DS_Store
+.idea

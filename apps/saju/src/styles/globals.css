@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@monorepo/ui/tokens.css';
+
+@custom-variant dark (&:is(.dark *));
+
+body {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  --background: oklch(0.99 0.005 60);
+  --foreground: oklch(0.18 0.02 280);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.02 280);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.02 280);
+  --primary: oklch(0.45 0.18 280);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.96 0.01 60);
+  --secondary-foreground: oklch(0.2 0.02 280);
+  --muted: oklch(0.96 0.005 60);
+  --muted-foreground: oklch(0.5 0.02 280);
+  --accent: oklch(0.94 0.04 60);
+  --accent-foreground: oklch(0.2 0.02 280);
+  --destructive: oklch(0.6 0.22 25);
+  --border: oklch(0.9 0.01 60);
+  --input: oklch(0.92 0.005 60);
+  --ring: oklch(0.55 0.18 280);
+  --radius: 0.625rem;
+  /* 사주 오행 컬러 토큰 */
+  --element-wood: oklch(0.65 0.16 145);
+  --element-fire: oklch(0.65 0.22 25);
+  --element-earth: oklch(0.7 0.13 80);
+  --element-metal: oklch(0.7 0.04 250);
+  --element-water: oklch(0.55 0.16 240);
+}
+
+.dark {
+  --background: oklch(0.16 0.02 280);
+  --foreground: oklch(0.97 0.005 60);
+  --card: oklch(0.21 0.025 280);
+  --card-foreground: oklch(0.97 0.005 60);
+  --popover: oklch(0.21 0.025 280);
+  --popover-foreground: oklch(0.97 0.005 60);
+  --primary: oklch(0.7 0.18 280);
+  --primary-foreground: oklch(0.18 0.02 280);
+  --secondary: oklch(0.28 0.02 280);
+  --secondary-foreground: oklch(0.97 0.005 60);
+  --muted: oklch(0.27 0.015 280);
+  --muted-foreground: oklch(0.72 0.02 280);
+  --accent: oklch(0.3 0.05 60);
+  --accent-foreground: oklch(0.97 0.005 60);
+  --destructive: oklch(0.7 0.2 25);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.6 0.18 280);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* 데스크탑(≥768px) 에서만 텍스트 크기 1 step up — 모바일은 기존 크기 유지.
+   body 기본을 16px 로 두고, text-* utility 도 1단계 키운다. */
+@media (min-width: 768px) {
+  body {
+    font-size: 1rem; /* 16px */
+    line-height: 1.5;
+  }
+  .text-xs {
+    font-size: 0.875rem; /* 12 → 14 */
+    line-height: 1.25rem;
+  }
+  .text-\[10px\],
+  .text-\[11px\] {
+    font-size: 0.8125rem; /* 10~11 → 13 */
+    line-height: 1.125rem;
+  }
+  .text-\[9px\] {
+    font-size: 0.75rem; /* 9 → 12 */
+    line-height: 1rem;
+  }
+  .text-sm {
+    font-size: 1rem; /* 14 → 16 */
+    line-height: 1.5rem;
+  }
+  .text-base {
+    font-size: 1.125rem; /* 16 → 18 */
+    line-height: 1.75rem;
+  }
+  .text-lg {
+    font-size: 1.25rem; /* 18 → 20 */
+    line-height: 1.75rem;
+  }
+  .text-xl {
+    font-size: 1.5rem; /* 20 → 24 */
+    line-height: 2rem;
+  }
+  .text-2xl {
+    font-size: 1.75rem; /* 24 → 28 */
+    line-height: 2.25rem;
+  }
+  .text-3xl {
+    font-size: 2rem; /* 30 → 32 */
+    line-height: 2.5rem;
+  }
+}
