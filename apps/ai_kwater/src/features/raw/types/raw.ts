@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/raw/index.js (48줄). 원수 정보만.
+// 원본: 가상의정수장/src/store/aio/modules/raw/index.js (48줄). 원수 정보만.
 
 export interface RawLatest {
   update_time: string | null

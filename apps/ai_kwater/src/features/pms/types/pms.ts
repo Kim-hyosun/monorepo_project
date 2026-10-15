@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/pms/* + components/pms/component/Monitor*.vue
+// 원본: 가상의정수장/src/store/pms/* + components/pms/component/Monitor*.vue
 // 펌프/모터 진동/전류/온도 모니터링 도메인. 4 amp 채널 + 진동 + 온도 시계열.
 
 export type MotorStatus = 'normal' | 'warning' | 'error' | 'off'

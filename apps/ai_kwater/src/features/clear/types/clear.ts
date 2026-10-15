@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/clear/index.js — 정수지 history.
+// 원본: 가상의정수장/src/store/aio/modules/clear/index.js — 정수지 history.
 
 export interface ClearHistoryFlowOutResponse {
   out_fr: Array<{ time: string; value: number }>

@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/mixing/index.js. 혼화 / 응집지.
+// 원본: 가상의정수장/src/store/aio/modules/mixing/index.js. 혼화 / 응집지.
 
 export interface MixingLatest {
   update_time: string | null

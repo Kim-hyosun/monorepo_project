@@ -8,7 +8,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/aio/receiving/ReceivingLeftContents.vue (1209줄) 의
+ * 원본 가상의정수장/components/aio/receiving/ReceivingLeftContents.vue (1209줄) 의
  * value-contents + img-contents 핵심 블록 부분 복원.
  * - 좌측: 3 value (유입 유량 순시 / 적산 / 유입 압력)
  * - 우측: 4 valve box (1차/2차 원수 조절 밸브 / 가이드 베인 / 바이패스)

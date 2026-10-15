@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_d21.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_d21.vue —
  * dual axis dashed line + 좌측 시리즈 임계선.
  */
 export default function LinechartD21({

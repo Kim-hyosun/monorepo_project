@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart2.vue — line + 평균 plot line.
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart2.vue — line + 평균 plot line.
  */
 export default function Linechart2({
   data,

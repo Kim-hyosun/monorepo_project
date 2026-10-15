@@ -17,7 +17,7 @@ interface Props {
 const PALETTE = ['#FF4369', '#5cafff', '#34d399']
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_d3.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_d3.vue —
  * 3 시리즈 dashed line + 1 임계선.
  */
 export default function LinechartD3({

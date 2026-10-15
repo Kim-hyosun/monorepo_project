@@ -24,7 +24,7 @@ const PRIMARY_COLOR = '#5cafff'
 const SECONDARY_COLOR = '#f87171'
 
 /**
- * 원본 성남정수장/components/pms/chart/dashboard/BarChart_main2.vue —
+ * 원본 가상의정수장/components/pms/chart/dashboard/BarChart_main2.vue —
  * 가로형 막대 차트 (horizontal bar) + 보조 시리즈 (옵션).
  */
 export default function BarChartMain2({ bars, title, height = 280, xLabel }: Props) {

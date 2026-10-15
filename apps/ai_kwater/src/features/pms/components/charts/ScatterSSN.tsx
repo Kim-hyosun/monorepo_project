@@ -23,7 +23,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Scatter_SSN.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Scatter_SSN.vue —
  * 송수펌프 회전수 vs 양정 산점 + 정격/현재 운영점 강조.
  */
 export default function ScatterSSN({

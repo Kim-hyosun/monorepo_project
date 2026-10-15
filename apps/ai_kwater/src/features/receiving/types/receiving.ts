@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/receiving/index.js. 주요 필드만 명시, 나머지는 generic.
+// 원본: 가상의정수장/src/store/aio/modules/receiving/index.js. 주요 필드만 명시, 나머지는 generic.
 
 export interface ReceivingLatest {
   update_time: string | null

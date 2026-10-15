@@ -14,7 +14,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart3.vue — area trend.
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart3.vue — area trend.
  */
 export default function Linechart3({
   data,

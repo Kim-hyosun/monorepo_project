@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/common.js 의 공정 라우팅/타임스탬프 계산 헬퍼.
+// 원본: 가상의정수장/src/store/aio/modules/common.js 의 공정 라우팅/타임스탬프 계산 헬퍼.
 
 import type { useRouter } from 'next/navigation'
 
@@ -87,7 +87,11 @@ export function routingByIndex(ctx: RoutingByIndexCtx, index: number): void {
   }
 }
 
-type ScheduleEntry = { start: string | number | null; end?: string | number | null; next_end?: string | number | null }
+type ScheduleEntry = {
+  start: string | number | null
+  end?: string | number | null
+  next_end?: string | number | null
+}
 
 /**
  * 원본 $getMinMaxTimestampAIFLocationSchedule.

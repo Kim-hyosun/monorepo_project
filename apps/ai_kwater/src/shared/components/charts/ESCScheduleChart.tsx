@@ -31,7 +31,7 @@ const STATE_LABEL: Record<ScheduleEntry['state'], string> = {
 }
 
 /**
- * 원본 성남정수장/components/aio/sedimentation/chart/ESCScheduleChart.vue 의
+ * 원본 가상의정수장/components/aio/sedimentation/chart/ESCScheduleChart.vue 의
  * 슬러지 배출/역세 schedule timeline.
  * Highcharts xrange 모듈 사이드이펙트 import 가 v11에서 신뢰성 떨어져 정적 SVG 로 재구현.
  */

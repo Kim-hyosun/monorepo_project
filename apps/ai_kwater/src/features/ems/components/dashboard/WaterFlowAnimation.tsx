@@ -3,7 +3,7 @@
 import { cn } from '@/shared/utils/cn'
 
 /**
- * 원본 성남정수장/components/ems/dashboard/* waterway 1:1 복제 강화판.
+ * 원본 가상의정수장/components/ems/dashboard/* waterway 1:1 복제 강화판.
  * - 평택4 → 배수지 송수관 6선 (메인 blue, 수평)
  * - 송산2 → 배수지 송수관 4선 (sub blue, 수평)
  * - DR/Peak 우회 적색 4선 (수평)

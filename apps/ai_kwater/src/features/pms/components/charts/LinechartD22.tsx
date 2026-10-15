@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_d22.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_d22.vue —
  * dual axis (좌측 area + 우측 dashed line) 혼합.
  */
 export default function LinechartD22({ primary, secondary, title, height = 260 }: Props) {

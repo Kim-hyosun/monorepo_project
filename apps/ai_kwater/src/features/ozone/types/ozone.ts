@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/ozone/index.js.
+// 원본: 가상의정수장/src/store/aio/modules/ozone/index.js.
 
 export interface OzoneLatest {
   update_time: string | null

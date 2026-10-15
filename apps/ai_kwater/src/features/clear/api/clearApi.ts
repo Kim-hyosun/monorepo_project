@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/clear/index.js → axios 함수형.
+// 원본: 가상의정수장/src/store/aio/modules/clear/index.js → axios 함수형.
 // 실제 페이지 호출 / queries / mock 은 Phase D 에서 추가.
 
 import { api } from '@/libs/axios/instance'

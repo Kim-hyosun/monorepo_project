@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/loginHistory.js GET /login 응답.
+// 원본: 가상의정수장/src/store/aio/modules/loginHistory.js GET /login 응답.
 
 export interface LoginHistoryEntry {
   login_history_index: number

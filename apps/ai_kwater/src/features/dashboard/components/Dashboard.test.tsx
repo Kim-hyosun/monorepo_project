@@ -13,7 +13,7 @@ describe('Dashboard aio (integration)', () => {
   it('제목 + AI 자율운영 라벨 표시', () => {
     renderWithProviders(<Dashboard />)
 
-    expect(screen.getByText('성남정수장 AI 자율운영 시스템')).toBeInTheDocument()
+    expect(screen.getByText('가상의정수장 AI 자율운영 시스템')).toBeInTheDocument()
     expect(screen.getByText('AI 자율운영 엔진')).toBeInTheDocument()
     expect(screen.getByText('주요감시현황 →')).toBeInTheDocument()
   })

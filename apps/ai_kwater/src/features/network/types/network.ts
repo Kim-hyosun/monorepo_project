@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/network.js + ConfigNetwork.vue v-model 키.
+// 원본: 가상의정수장/src/store/aio/modules/network.js + ConfigNetwork.vue v-model 키.
 
 export interface NetworkConfig {
   scada1_address: string

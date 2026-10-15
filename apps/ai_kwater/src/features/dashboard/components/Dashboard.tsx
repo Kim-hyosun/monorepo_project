@@ -140,7 +140,7 @@ export function Dashboard() {
       }}
     >
       <AioPageHeader
-        title='성남정수장 AI 자율운영 시스템'
+        title='가상의정수장 AI 자율운영 시스템'
         description='9 공정 도메인의 핵심 지표를 한 화면에서 확인합니다'
         actions={
           <Link

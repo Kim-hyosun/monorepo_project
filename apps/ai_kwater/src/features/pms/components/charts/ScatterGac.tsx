@@ -33,7 +33,7 @@ const STATE_LABEL: Record<GacPoint['state'], string> = {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Scatter_gac.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Scatter_gac.vue —
  * GAC 흡착탑 운영 시간 vs 출구 탁도 상태 산점.
  */
 export default function ScatterGac({

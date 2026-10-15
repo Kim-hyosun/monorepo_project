@@ -22,7 +22,7 @@ interface Props {
 const PALETTE = ['#5cafff', '#34d399', '#fbbf24', '#a78bfa', '#f87171', '#7dd3fc']
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Scatter_comp.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Scatter_comp.vue —
  * 모터/펌프 전류 비교 산점. 다중 그룹 비교.
  */
 export default function ScatterComp({

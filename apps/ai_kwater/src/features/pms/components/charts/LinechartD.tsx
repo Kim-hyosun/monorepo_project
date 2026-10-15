@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_d.vue (292줄) 의
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_d.vue (292줄) 의
  * dashed line + markLine 임계선 1:1 옵션.
  * - 라인은 점선(dashStyle: 'Dash'), 컬러 #FF4369
  * - yAxis plotLine 으로 임계선 + "임계선" 라벨 (end 위치 빨강)

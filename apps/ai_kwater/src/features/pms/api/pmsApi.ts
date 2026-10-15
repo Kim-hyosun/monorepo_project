@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/pms/modules/monitor*.js → axios 함수형. 단일 엔드포인트로 통합.
+// 원본: 가상의정수장/src/store/pms/modules/monitor*.js → axios 함수형. 단일 엔드포인트로 통합.
 
 import { api } from '@/libs/axios/instance'
 import type {

@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/dialog/index.js → Zustand.
+// 원본: 가상의정수장/src/store/aio/modules/dialog/index.js → Zustand.
 // 공정 페이지에서 사용하는 dialog visibility (alertStore 는 글로벌 dialog 별도).
 
 import { create } from 'zustand'

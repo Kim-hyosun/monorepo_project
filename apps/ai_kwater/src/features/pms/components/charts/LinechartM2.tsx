@@ -26,7 +26,7 @@ const PALETTE_LEFT = ['#5cafff', '#7dd3fc', '#a78bfa']
 const PALETTE_RIGHT = ['#fbbf24', '#f87171', '#fb923c']
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_m2.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_m2.vue —
  * multi-line 이중축. 좌측은 spline, 우측은 line.
  */
 export default function LinechartM2({

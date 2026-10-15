@@ -1,24 +1,29 @@
 'use client'
 
-import type { CalculateResult } from '@sazuapp/client'
+import { Check, Copy } from 'lucide-react'
+import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 
-import { AnalysisSummary } from '@/components/AnalysisSummary'
-import { DecadeFortuneTimeline } from '@/components/DecadeFortuneTimeline'
-import { FiveElementsChart } from '@/components/FiveElementsChart'
-import { FourPillars } from '@/components/FourPillars'
-import { InputSummary } from '@/components/InputSummary'
-import { JsonExportSection } from '@/components/JsonExportSection'
+import type { ManseApiResult } from '@/lib/types'
+import { Button } from '@/shared/ui/button'
 
 interface Props {
-  data: CalculateResult
+  data: ManseApiResult
   onReset: () => void
 }
 
-/** 사주 분석 결과 — input / fourPillars / elements / summary+sinStrength / decadeFortune */
 export function SajuResult({ data, onReset }: Props) {
-  const m = data.modules
-  const summary = m.summary as Record<string, unknown> | undefined
-  const currentAge = readCurrentAge(summary)
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(data.compactData)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2200)
+    } catch {
+      setCopied(false)
+    }
+  }
 
   return (
     <div className='space-y-5'>
@@ -33,24 +38,24 @@ export function SajuResult({ data, onReset }: Props) {
         </button>
       </div>
 
-      <InputSummary
-        input={data.input as Record<string, unknown> | undefined}
-        timezone={data.timezone as Record<string, unknown> | undefined}
-      />
-      <FourPillars pillars={m.fourPillars} />
-      <FiveElementsChart elements={m.elements} />
-      <AnalysisSummary summary={m.summary} sinStrength={m.sinStrength} />
-      <DecadeFortuneTimeline decadeFortune={m.decadeFortune} currentAge={currentAge} />
-      <JsonExportSection data={data} />
+      <article className='bg-card text-card-foreground rounded-xl border p-5 shadow-sm sm:p-7'>
+        <h3 className='mb-5 flex items-center gap-2 text-lg font-semibold'>
+          <span className='bg-primary/15 text-primary inline-flex size-8 items-center justify-center rounded-full text-sm'>
+            풀이
+          </span>
+          사주 해석
+        </h3>
+        <div className='text-foreground/90 [&_blockquote]:border-primary/40 [&_blockquote]:text-muted-foreground [&_blockquote]:my-5 [&_blockquote]:border-l-2 [&_blockquote]:pl-4 [&_h1]:mb-4 [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:mb-3 [&_h2]:mt-7 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mb-2 [&_h3]:mt-5 [&_h3]:text-lg [&_h3]:font-semibold [&_hr]:my-6 [&_hr]:border-border [&_li]:my-1 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-3 [&_strong]:text-foreground [&_strong]:font-semibold [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 leading-7 wrap-break-word'>
+          <ReactMarkdown>{data.interpretation}</ReactMarkdown>
+        </div>
+      </article>
+
+      <div className='flex justify-end'>
+        <Button type='button' variant='outline' size='lg' onClick={handleCopy}>
+          {copied ? <Check /> : <Copy />}
+          {copied ? 'AI 프롬프트용 데이터 복사됨' : 'AI 프롬프트용 데이터 복사'}
+        </Button>
+      </div>
     </div>
   )
-}
-
-function readCurrentAge(summary?: Record<string, unknown>): number | undefined {
-  if (!summary) return undefined
-  const fp = summary.fortunePhase as Record<string, unknown> | undefined
-  if (!fp) return undefined
-  const cur = fp.current as Record<string, unknown> | undefined
-  if (!cur) return undefined
-  return typeof cur.age === 'number' ? cur.age : undefined
 }

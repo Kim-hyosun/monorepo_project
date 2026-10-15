@@ -16,7 +16,7 @@ interface Props {
 const PALETTE = ['#5cafff', '#34d399', '#fbbf24', '#f87171']
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_d4.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_d4.vue —
  * 4 시리즈 dashed line (모터 DE/NDE + 펌프 DE/NDE 비교).
  */
 export default function LinechartD4({ series, title, yLabel, height = 280 }: Props) {

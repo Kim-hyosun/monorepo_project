@@ -1,8 +1,11 @@
-import type { CalculateResult } from '@sazuapp/client'
+export interface ManseApiResult {
+  compactData: string
+  interpretation: string
+}
 
 /** /api/sazu 응답 envelope */
 export type SajuApiResponse =
-  | { ok: true; data: CalculateResult }
+  | { ok: true; data: ManseApiResult }
   | {
       ok: false
       error: {

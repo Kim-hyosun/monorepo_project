@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/ems/index.js (ems/latest 단일 엔드포인트)
+// 원본: 가상의정수장/src/store/aio/modules/ems/index.js (ems/latest 단일 엔드포인트)
 // + 20 vue 파일에서 사용된 보조 도메인(cost / goal / tag / peak settings / report)
 
 export type OperationMode = 0 | 1 | 2 // 0=AI분석 1=부분AI 2=AI

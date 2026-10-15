@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/aio/filter/chart/AILocationChart.vue 의
+ * 원본 가상의정수장/components/aio/filter/chart/AILocationChart.vue 의
  * 시계열 + plotBand (AI 추천 운영 구간) 1:1 변환.
  */
 export default function AILocationChart({

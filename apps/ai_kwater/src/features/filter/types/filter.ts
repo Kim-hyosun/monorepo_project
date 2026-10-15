@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/filter/index.js. 여과지.
+// 원본: 가상의정수장/src/store/aio/modules/filter/index.js. 여과지.
 
 export interface FilterScheduleEntry {
   /** 여과지 번호 */

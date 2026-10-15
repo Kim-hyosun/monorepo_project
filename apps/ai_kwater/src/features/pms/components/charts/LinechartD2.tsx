@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart_d2.vue —
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart_d2.vue —
  * dashed line + 상/하 이중 임계선.
  */
 export default function LinechartD2({

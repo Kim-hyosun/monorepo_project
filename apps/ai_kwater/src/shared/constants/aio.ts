@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/aio.js 의 상수들
+// 원본: 가상의정수장/src/store/aio/modules/aio.js 의 상수들
 // 환경 의존 (DEV_SERVER, VUE_APP_BASE_URL) 은 axios baseURL 로 대체되었으므로 제거.
 
 export const SERVICE_URL = {

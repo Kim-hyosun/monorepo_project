@@ -9,7 +9,7 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
   title: '사주 만세력',
-  description: '생년월일과 시간을 입력하면 사주 원국·오행·요약 분석을 보여줍니다',
+  description: '재미로만 즐겨봅시다.',
   icons: { icon: '/icon.png' },
 }
 

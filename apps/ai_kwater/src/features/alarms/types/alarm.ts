@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/alarm/alarm.js 응답/페이로드.
+// 원본: 가상의정수장/src/store/aio/modules/alarm/alarm.js 응답/페이로드.
 
 /** 알람 설정(관리자 전용 GET /alarms/setting). 원본 alarm_info 항목. */
 export interface AlarmInfo {

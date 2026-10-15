@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/disinfection/index.js. 전염소/중염소/후염소 (stage 1/2/3).
+// 원본: 가상의정수장/src/store/aio/modules/disinfection/index.js. 전염소/중염소/후염소 (stage 1/2/3).
 
 export interface DisinfectionStage {
   /** 잔류 염소 농도 */

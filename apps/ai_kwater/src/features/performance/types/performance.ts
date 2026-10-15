@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/performance.js + sub/* 컴포넌트의 데이터 키 추정.
+// 원본: 가상의정수장/src/store/aio/modules/performance.js + sub/* 컴포넌트의 데이터 키 추정.
 
 export interface SystemInfo {
   hostname: string

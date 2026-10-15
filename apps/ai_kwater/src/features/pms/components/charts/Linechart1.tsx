@@ -14,7 +14,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Linechart1.vue — 기본 단일 line.
+ * 원본 가상의정수장/components/pms/chart/monitoring/Linechart1.vue — 기본 단일 line.
  */
 export default function Linechart1({
   data,

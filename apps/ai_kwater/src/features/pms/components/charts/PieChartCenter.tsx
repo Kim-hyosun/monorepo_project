@@ -18,7 +18,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/dashboard/PieChart_center.vue —
+ * 원본 가상의정수장/components/pms/chart/dashboard/PieChart_center.vue —
  * 단일 값 도넛 (게이지 형태) + 중앙 강조 텍스트.
  */
 export default function PieChartCenter({

@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/aio.js + drawer.js (selectedMainMenuIndex 일부) → Zustand.
+// 원본: 가상의정수장/src/store/aio/modules/aio.js + drawer.js (selectedMainMenuIndex 일부) → Zustand.
 
 import { create } from 'zustand'
 

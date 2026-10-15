@@ -22,7 +22,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/aio/disinfection/chart/ChartBoxComponent.vue 의
+ * 원본 가상의정수장/components/aio/disinfection/chart/ChartBoxComponent.vue 의
  * 1 KPI 박스 + mini trend 짝 컴포넌트.
  */
 export default function ChartBoxComponent({

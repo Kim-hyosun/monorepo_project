@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/common.js Vue prototype helpers 중 포매팅 계열.
+// 원본: 가상의정수장/src/store/aio/modules/common.js Vue prototype helpers 중 포매팅 계열.
 
 const NOTO_SANS_KR = 'Noto Sans CJK KR'
 
@@ -36,7 +36,10 @@ export interface SpeakOptions {
 }
 export function speak(text: string, opt: SpeakOptions = {}): void {
   if (typeof window === 'undefined') return
-  if (typeof window.SpeechSynthesisUtterance === 'undefined' || typeof window.speechSynthesis === 'undefined') {
+  if (
+    typeof window.SpeechSynthesisUtterance === 'undefined' ||
+    typeof window.speechSynthesis === 'undefined'
+  ) {
     // 원본은 alert 로 알렸지만 신규는 silent fail (글로벌 dialog 와 충돌 방지)
     return
   }

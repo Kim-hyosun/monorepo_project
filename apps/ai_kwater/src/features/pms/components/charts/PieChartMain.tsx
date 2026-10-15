@@ -24,7 +24,7 @@ interface Props {
 const PALETTE = ['#34d399', '#5cafff', '#fbbf24', '#f87171', '#a78bfa', '#7dd3fc']
 
 /**
- * 원본 성남정수장/components/pms/chart/dashboard/PieChart_main.vue —
+ * 원본 가상의정수장/components/pms/chart/dashboard/PieChart_main.vue —
  * 큰 도넛 차트 + 중앙 텍스트.
  */
 export default function PieChartMain({

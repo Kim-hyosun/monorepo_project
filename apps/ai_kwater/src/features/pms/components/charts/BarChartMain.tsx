@@ -15,7 +15,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/dashboard/BarChart_main.vue (39줄) 의
+ * 원본 가상의정수장/components/pms/chart/dashboard/BarChart_main.vue (39줄) 의
  * 공정별 normal/err pair stacked column 1:1.
  * - normal = 정상 (emerald), err = 경보 (rose)
  * - click 시 onSelect(index) — 원본 selectBarchart 와 동등

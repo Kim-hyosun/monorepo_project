@@ -23,7 +23,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/pms/chart/monitoring/Scatter_PTK.vue (528줄) 의
+ * 원본 가상의정수장/components/pms/chart/monitoring/Scatter_PTK.vue (528줄) 의
  * Health Feature Space scatter 1:1 옵션.
  * - 4 카테고리 (Normal / Warning / Critical / Fault) 시리즈
  * - x = 유량(㎥/min), y = 압력(kgf/cm²)

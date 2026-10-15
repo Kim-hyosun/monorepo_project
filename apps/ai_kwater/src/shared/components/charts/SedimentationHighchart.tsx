@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/aio/sedimentation/SedimentationHighchart.vue 의
+ * 원본 가상의정수장/components/aio/sedimentation/SedimentationHighchart.vue 의
  * 출구 탁도 + AI 예측 + 슬러지 농도(이중축) 1:1 변환.
  */
 export default function SedimentationHighchart({

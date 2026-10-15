@@ -28,7 +28,7 @@ export default function Sidebar() {
         <Link href='/' className='block text-base font-semibold'>
           AI Kwater
         </Link>
-        <p className='text-muted-foreground mt-1 text-xs'>성남정수장 마이그레이션</p>
+        <p className='text-muted-foreground mt-1 text-xs'>가상의정수장 마이그레이션</p>
       </div>
 
       <nav className='space-y-4 px-3 pb-8'>
@@ -48,7 +48,7 @@ export default function Sidebar() {
                         'block rounded px-2 py-1.5 text-xs transition-colors',
                         active
                           ? 'bg-primary text-primary-foreground'
-                          : 'hover:bg-muted text-foreground/80'
+                          : 'hover:bg-muted text-foreground/80',
                       )}
                     >
                       {route.label}

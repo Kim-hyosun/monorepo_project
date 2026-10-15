@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/aio/receiving/ReceivingHighchart.vue (754줄) 의
+ * 원본 가상의정수장/components/aio/receiving/ReceivingHighchart.vue (754줄) 의
  * 원수 유입 + AI 예측 + 목표 수위 범위 1:1 변환.
  */
 export default function ReceivingHighchart({

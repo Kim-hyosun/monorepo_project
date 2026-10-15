@@ -1,4 +1,4 @@
-// 원본: 성남정수장/src/store/aio/modules/raw/index.js → axios 함수형.
+// 원본: 가상의정수장/src/store/aio/modules/raw/index.js → axios 함수형.
 
 import { api } from '@/libs/axios/instance'
 import type { RawLatestResponse } from '@/features/raw/types/raw'

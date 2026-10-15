@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * 원본 성남정수장/components/aio/filter/chart/AILocationChartS.vue —
+ * 원본 가상의정수장/components/aio/filter/chart/AILocationChartS.vue —
  * 4단계 S 분기용 AILocation. 3단계 비교 시리즈 + AI 추천 plotBand.
  */
 export default function AILocationChartS({
