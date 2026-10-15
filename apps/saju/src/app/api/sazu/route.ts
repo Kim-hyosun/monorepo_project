@@ -4,7 +4,7 @@ import { sajuInputSchema } from '@/lib/schema'
 import type { ManseApiResult } from '@/lib/types'
 
 export const runtime = 'nodejs'
-const MANSE_API_URL = 'https://www.sazu.app/manse-api'
+const MANSE_API_URL = 'https://www.sazu.app/manse-api/api/saju'
 
 /**
  * POST /api/sazu
