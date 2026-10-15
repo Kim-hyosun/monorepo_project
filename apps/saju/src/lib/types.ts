@@ -7,16 +7,16 @@ export interface ManseApiResult {
 export type SajuApiResponse =
   | { ok: true; data: ManseApiResult }
   | {
-      ok: false
-      error: {
-        code: string
-        message: string
-        status: number
-        responseId?: string
-        retryAfterSec?: number
-        issues?: { path: string; message: string }[]
-      }
+    ok: false
+    error: {
+      code: string
+      message: string
+      status: number
+      responseId?: string
+      retryAfterSec?: number
+      issues?: { path: string; message: string }[]
     }
+  }
 
 /** 지장간 (월령으로 천간에 작용하는 3가지 기운) */
 export interface JiJangGanItem {

@@ -10,7 +10,7 @@ import type { SajuInput } from '@/lib/schema'
 import type { ManseApiResult, SajuApiResponse } from '@/lib/types'
 
 async function callSaju(input: SajuInput): Promise<ManseApiResult> {
-  const res = await fetch('/api/sazu', {
+  const res = await fetch('/api/saju', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
