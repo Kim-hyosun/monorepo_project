@@ -43,7 +43,10 @@ export async function POST(req: Request) {
   try {
     const response = await fetch(MANSE_API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': 'Lets_enjoy_Saju_just_for_fun',
+      },
       body: rawBody,
       cache: 'no-store',
     })
