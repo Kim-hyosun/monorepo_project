@@ -47,7 +47,12 @@ export async function POST(req: Request) {
                 'Content-Type': 'application/json',
                 'x-api-key': 'Lets_enjoy_Saju_just_for_fun',
             },
-            body: rawBody,
+            body: JSON.stringify({
+                birthDate: parsed.data.birthDate,
+                birthTime: parsed.data.birthTime ?? '12:00',
+                timeUnknown: parsed.data.timeUnknown,
+                gender: parsed.data.gender,
+            }),
             cache: 'no-store',
         })
 

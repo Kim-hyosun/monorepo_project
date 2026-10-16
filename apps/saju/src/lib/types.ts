@@ -3,7 +3,7 @@ export interface ManseApiResult {
   interpretation: string
 }
 
-/** /api/sazu 응답 envelope */
+/** /api/saju 응답 envelope */
 export type SajuApiResponse =
   | { ok: true; data: ManseApiResult }
   | {
