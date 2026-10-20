@@ -8,7 +8,7 @@ const MANSE_API_URL = 'https://sajuapi.vercel.app/api/saju'
 
 /**
  * POST /api/saju
- * 요청 본문은 검증 후 변경 없이 만세력 API로 전달한다.
+ * 요청 본문을 검증하고 필요한 입력값만 만세력 API로 전달한다.
  * 응답: { ok: true, data: ManseApiResult } | { ok: false, error: { code, message, status } }
  */
 export async function POST(req: Request) {

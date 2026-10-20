@@ -32,7 +32,6 @@ export function SajuForm({ onSubmit, loading }: Props) {
       timeUnknown: false,
       gender: 'male',
       calendar: 'solar',
-      birthCity: '서울',
     },
   })
 
@@ -144,19 +143,6 @@ export function SajuForm({ onSubmit, loading }: Props) {
         <p className='text-muted-foreground text-xs'>
           현재 API 는 윤달 직접 지원 X — 음력 선택 시 평월 기준
         </p>
-      </div>
-
-      {/* 출생 도시 */}
-      <div className='space-y-2'>
-        <Label htmlFor='birthCity'>출생 도시 (선택)</Label>
-        <Input
-          id='birthCity'
-          type='text'
-          placeholder='서울'
-          aria-invalid={!!errors.birthCity}
-          {...register('birthCity')}
-        />
-        <p className='text-muted-foreground text-xs'>진태양시 보정에 사용됩니다 (기본 서울)</p>
       </div>
 
       <Button type='submit' size='lg' disabled={loading} className='w-full'>

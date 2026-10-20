@@ -10,10 +10,11 @@ import type { SajuInput } from '@/lib/schema'
 import type { ManseApiResult, SajuApiResponse } from '@/lib/types'
 
 async function callSaju(input: SajuInput): Promise<ManseApiResult> {
+  const { birthDate, birthTime, timeUnknown, gender } = input
   const res = await fetch('/api/saju', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(input),
+    body: JSON.stringify({ birthDate, birthTime, timeUnknown, gender }),
   })
   const json = (await res.json()) as SajuApiResponse
   if (!json.ok) {

@@ -18,8 +18,6 @@ export const sajuInputSchema = z.object({
   gender: z.enum(['male', 'female']),
   /** 양력 / 음력. SDK 는 isLunar boolean 만 받음 (윤달 미지원 — 향후 calendar.convert 로 보완) */
   calendar: z.enum(['solar', 'lunar']).default('solar'),
-  /** 출생 도시 (선택, 진태양시 보정용) */
-  birthCity: z.string().max(60).optional(),
 }).refine((input) => input.timeUnknown || input.birthTime !== undefined, {
   path: ['birthTime'],
   message: '출생 시간을 입력하거나 시간 모름을 선택하세요',
